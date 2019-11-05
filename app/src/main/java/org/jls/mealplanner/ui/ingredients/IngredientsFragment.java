@@ -22,7 +22,7 @@ public class IngredientsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         ingredientsViewModel =
                 ViewModelProviders.of(this).get(IngredientsViewModel.class);
-        View root = inflater.inflate(R.layout.ingredients_fragments, container, false);
+        View root = inflater.inflate(R.layout.ingredients_fragment, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
         ingredientsViewModel.getText().observe(this, new Observer<String>() {
             @Override
