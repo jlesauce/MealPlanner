@@ -1,4 +1,4 @@
-package org.jls.mealplanner.ui.notifications;
+package org.jls.mealplanner.ui.ingredients;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.jls.mealplanner.R;
 
-public class NotificationsFragment extends Fragment {
+public class IngredientsFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private IngredientsViewModel ingredientsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(this, new Observer<String>() {
+        ingredientsViewModel =
+                ViewModelProviders.of(this).get(IngredientsViewModel.class);
+        View root = inflater.inflate(R.layout.ingredients_fragments, container, false);
+        final TextView textView = root.findViewById(R.id.text_dashboard);
+        ingredientsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

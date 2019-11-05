@@ -1,4 +1,4 @@
-package org.jls.mealplanner.ui.dashboard;
+package org.jls.mealplanner.ui.shoppinglist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import org.jls.mealplanner.R;
 
-public class DashboardFragment extends Fragment {
+public class ShoppingListFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private ShoppingListViewModel notificationsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(this, new Observer<String>() {
+        notificationsViewModel =
+                ViewModelProviders.of(this).get(ShoppingListViewModel.class);
+        View root = inflater.inflate(R.layout.shopping_list_fragment, container, false);
+        final TextView textView = root.findViewById(R.id.text_notifications);
+        notificationsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
