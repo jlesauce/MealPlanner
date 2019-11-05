@@ -3,4 +3,7 @@
     <string name="title_calendar">Calendar</string>
     <string name="title_ingredients">Ingredients</string>
     <string name="title_shopping_list">Shopping List</string>
+    <string name="title_day">Day</string>
+    <string name="label_lunch">Lunch</string>
+    <string name="label_dinner">Dinner</string>
 </resources>

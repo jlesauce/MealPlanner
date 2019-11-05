@@ -34,7 +34,7 @@ public class CalendarFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), DayActivity.class);
                 intent.putExtra("date", date);
-                startActivity(intent);
+                getActivity().startActivity(intent);
             }
         });
     }
