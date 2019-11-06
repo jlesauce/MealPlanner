@@ -1,4 +1,4 @@
-package org.jls.mealplanner.ui.ingredients;
+package org.jls.mealplanner.ui.ingredients.category;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -9,15 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jls.mealplanner.R;
+import org.jls.mealplanner.ingredient.CategoryItem;
+import org.jls.mealplanner.ui.ingredients.ingredient.IngredientCategoryActivity;
 
 import java.util.ArrayList;
 
-public class IngredientCategoriesAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
+public class CategoriesViewAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
-    private ArrayList<CategoryItem> categoryIems;
+    private ArrayList<CategoryItem> categoryItems;
 
-    public IngredientCategoriesAdapter(ArrayList<CategoryItem> items) {
-        this.categoryIems = items;
+    public CategoriesViewAdapter(ArrayList<CategoryItem> items) {
+        this.categoryItems = items;
     }
 
     @NonNull
@@ -52,10 +54,10 @@ public class IngredientCategoriesAdapter extends RecyclerView.Adapter<CategoryVi
 
     @Override
     public int getItemCount() {
-        return categoryIems.size();
+        return categoryItems.size();
     }
 
     private CategoryItem getCategoryItemAtPosition(final int position) {
-        return categoryIems.get(position);
+        return categoryItems.get(position);
     }
 }

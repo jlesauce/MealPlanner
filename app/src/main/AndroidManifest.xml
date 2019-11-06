@@ -38,7 +38,7 @@
             android:parentActivityName=".MainActivity" />
 
         <activity
-            android:name=".ui.ingredients.IngredientCategoryActivity"
+            android:name=".ui.ingredients.ingredient.IngredientCategoryActivity"
             android:label="@string/label_category"
             android:parentActivityName=".MainActivity" />
 

@@ -1,4 +1,4 @@
-package org.jls.mealplanner.ui.ingredients;
+package org.jls.mealplanner.ingredient;
 
 import androidx.annotation.DrawableRes;
 

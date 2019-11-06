@@ -12,15 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jls.mealplanner.R;
+import org.jls.mealplanner.ui.ingredients.category.CategoriesViewModel;
+import org.jls.mealplanner.ui.ingredients.category.CategoriesViewAdapter;
 
 public class IngredientsFragment extends Fragment {
 
-    private IngredientsViewModel ingredientsViewModel;
+    private CategoriesViewModel categoriesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ingredientsViewModel =
-                ViewModelProviders.of(this).get(IngredientsViewModel.class);
+        categoriesViewModel =
+                ViewModelProviders.of(this).get(CategoriesViewModel.class);
         View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         populateIngredientCategoriesInRecyclerView(rootView);
@@ -35,7 +37,7 @@ public class IngredientsFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        IngredientCategoriesAdapter categoriesAdapter = new IngredientCategoriesAdapter(ingredientsViewModel.getCategoryItemsData().getValue());
+        CategoriesViewAdapter categoriesAdapter = new CategoriesViewAdapter(categoriesViewModel.getCategoryItemsData().getValue());
         recyclerView.setAdapter(categoriesAdapter);
     }
 }

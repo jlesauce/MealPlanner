@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.ingredients.IngredientCategoryActivity">
+    tools:context=".ui.ingredients.ingredient.IngredientCategoryActivity">
 
     <TextView
-        android:id="@+id/categoriesTextView"
+        android:id="@+id/categoryTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/label_category"
@@ -15,7 +15,7 @@
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ingredientCategoriesRecyclerView"
+        android:id="@+id/ingredientsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />

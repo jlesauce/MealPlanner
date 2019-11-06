@@ -1,4 +1,4 @@
-package org.jls.mealplanner.ui.ingredients;
+package org.jls.mealplanner.ui.ingredients.category;
 
 import android.view.View;
 import android.widget.ImageView;
