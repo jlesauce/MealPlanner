@@ -22,7 +22,7 @@ public class ShoppingListFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         notificationsViewModel =
                 ViewModelProviders.of(this).get(ShoppingListViewModel.class);
-        View root = inflater.inflate(R.layout.shopping_list_fragment, container, false);
+        View root = inflater.inflate(R.layout.fragment_shopping_list, container, false);
         final TextView textView = root.findViewById(R.id.text_notifications);
         notificationsViewModel.getText().observe(this, new Observer<String>() {
             @Override

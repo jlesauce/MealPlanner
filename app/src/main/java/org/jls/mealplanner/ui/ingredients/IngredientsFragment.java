@@ -21,7 +21,7 @@ public class IngredientsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         ingredientsViewModel =
                 ViewModelProviders.of(this).get(IngredientsViewModel.class);
-        View rootView = inflater.inflate(R.layout.ingredients_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         populateIngredientCategoriesInRecyclerView(rootView);
 

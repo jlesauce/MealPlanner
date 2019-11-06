@@ -25,8 +25,8 @@ public class IngredientsViewModel extends ViewModel {
     }
 
     private void initializeCategoryItems() {
-        categoryItems.add(new CategoryItem(R.drawable.proteins, "Protéines"));
-        categoryItems.add(new CategoryItem(R.drawable.vegetables, "Légumes"));
-        categoryItems.add(new CategoryItem(R.drawable.carbohydrates, "Féculents"));
+        categoryItems.add(new CategoryItem(R.drawable.icon_proteins, "Protéines"));
+        categoryItems.add(new CategoryItem(R.drawable.icon_vegetables, "Légumes"));
+        categoryItems.add(new CategoryItem(R.drawable.icon_carbohydrates, "Féculents"));
     }
 }

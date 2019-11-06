@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_calendar"
-        android:icon="@drawable/ic_calendar_black_24dp"
+        android:icon="@drawable/vector_icon_calendar"
         android:title="@string/title_calendar" />
 
     <item
         android:id="@+id/navigation_ingredients"
-        android:icon="@drawable/ic_ingredients_black_24dp"
+        android:icon="@drawable/vector_icon_ingredients"
         android:title="@string/title_ingredients" />
 
     <item
         android:id="@+id/navigation_shopping_list"
-        android:icon="@drawable/ic_shopping_list_black_24dp"
+        android:icon="@drawable/vector_icon_shopping_list"
         android:title="@string/title_shopping_list" />
 </menu>

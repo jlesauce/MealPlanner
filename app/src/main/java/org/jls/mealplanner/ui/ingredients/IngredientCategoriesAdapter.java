@@ -1,5 +1,6 @@
 package org.jls.mealplanner.ui.ingredients;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,20 @@ public class IngredientCategoriesAdapter extends RecyclerView.Adapter<CategoryVi
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_category_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ingredient_category, parent, false);
+        addClickListenerToCategoryItems(parent, view);
         return new CategoryViewHolder(view);
+    }
+
+    private void addClickListenerToCategoryItems(@NonNull final ViewGroup parent, @NonNull View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(parent.getContext(), IngredientCategoryActivity.class);
+                intent.putExtra("category", "test");
+                parent.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override

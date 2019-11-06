@@ -18,7 +18,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.calendar_fragment, container, false);
+        View root = inflater.inflate(R.layout.fragment_calendar, container, false);
         CalendarView calendarView = root.findViewById(R.id.calendarView);
 
         addDateChangeListenerTo(calendarView);

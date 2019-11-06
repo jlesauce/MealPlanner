@@ -15,7 +15,7 @@ public class DayActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.day_activity);
+        setContentView(R.layout.activity_day_meals);
 
         addClickListenerToAddLunchIngredientButton();
     }
