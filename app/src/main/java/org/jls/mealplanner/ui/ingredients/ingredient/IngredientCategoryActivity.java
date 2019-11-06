@@ -1,6 +1,8 @@
 package org.jls.mealplanner.ui.ingredients.ingredient;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jls.mealplanner.R;
+import org.jls.mealplanner.ui.ingredients.category.IngredientCategory;
 
 public class IngredientCategoryActivity extends AppCompatActivity {
 
@@ -21,7 +24,21 @@ public class IngredientCategoryActivity extends AppCompatActivity {
 
         ingredientsViewModel =
                 ViewModelProviders.of(this).get(IngredientsViewModel.class);
+
+        retrieveIntentData(getIntent());
+        updateCategoryLabel();
         populateIngredientsInRecyclerView();
+    }
+
+    private void retrieveIntentData(final Intent intent) {
+        String categoryId = intent.getStringExtra("category");
+        ingredientsViewModel.setIngredientCategory(IngredientCategory.toIngredientCategory(categoryId));
+    }
+
+    private void updateCategoryLabel() {
+        TextView categoryTextView = findViewById(R.id.categoryTextView);
+        IngredientCategory category = ingredientsViewModel.getIngredientCategory();
+        categoryTextView.setText(category.displayName());
     }
 
     private void populateIngredientsInRecyclerView() {

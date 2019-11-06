@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class CategoriesViewAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
+    private RecyclerView recyclerView;
     private ArrayList<CategoryItem> categoryItems;
 
     public CategoriesViewAdapter(ArrayList<CategoryItem> items) {
@@ -34,8 +35,18 @@ public class CategoriesViewAdapter extends RecyclerView.Adapter<CategoryViewHold
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CategoryItem categoryItem = getClickedCategoryItem(view);
+                startIngredientCategoryActivity(categoryItem.getIngredientCategory());
+            }
+
+            private CategoryItem getClickedCategoryItem(@NonNull final View view) {
+                int itemPosition = recyclerView.getChildLayoutPosition(view);
+                return categoryItems.get(itemPosition);
+            }
+
+            private void startIngredientCategoryActivity(final IngredientCategory category) {
                 Intent intent = new Intent(parent.getContext(), IngredientCategoryActivity.class);
-                intent.putExtra("category", "test");
+                intent.putExtra("category", category.id());
                 parent.getContext().startActivity(intent);
             }
         });
@@ -44,12 +55,13 @@ public class CategoriesViewAdapter extends RecyclerView.Adapter<CategoryViewHold
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         holder.getCategoryImageView().setImageResource(getCategoryItemAtPosition(position).getImageResource());
-        holder.getCategoryNameTextView().setText(getCategoryItemAtPosition(position).getCategoryName());
+        holder.getCategoryNameTextView().setText(getCategoryItemAtPosition(position).getCategoryDisplayName());
     }
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
 
     @Override
