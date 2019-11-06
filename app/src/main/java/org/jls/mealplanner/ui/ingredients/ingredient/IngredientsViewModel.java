@@ -39,8 +39,8 @@ public class IngredientsViewModel extends ViewModel {
     }
 
     private void initializeIngredientItems() {
-        ingredientsItems.add(new IngredientItem(R.drawable.icon_proteins, "Tomate"));
-        ingredientsItems.add(new IngredientItem(R.drawable.icon_vegetables, "Concombre"));
-        ingredientsItems.add(new IngredientItem(R.drawable.icon_carbohydrates, "Salade"));
+        ingredientsItems.add(new IngredientItem(R.drawable.icon_default_ingredient, "Tomate"));
+        ingredientsItems.add(new IngredientItem(R.drawable.icon_default_ingredient, "Concombre"));
+        ingredientsItems.add(new IngredientItem(R.drawable.icon_default_ingredient, "Salade"));
     }
 }
