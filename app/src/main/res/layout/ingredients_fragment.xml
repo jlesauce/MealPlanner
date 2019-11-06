@@ -17,7 +17,9 @@
             android:id="@+id/categoriesTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/label_categories" />
+            android:text="@string/label_categories"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ingredientCategoriesRecyclerView"
