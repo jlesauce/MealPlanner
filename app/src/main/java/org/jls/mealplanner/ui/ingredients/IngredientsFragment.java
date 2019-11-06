@@ -4,13 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.jls.mealplanner.R;
 
@@ -22,14 +21,21 @@ public class IngredientsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         ingredientsViewModel =
                 ViewModelProviders.of(this).get(IngredientsViewModel.class);
-        View root = inflater.inflate(R.layout.ingredients_fragment, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        ingredientsViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+        View rootView = inflater.inflate(R.layout.ingredients_fragment, container, false);
+
+        populateIngredientCategoriesInRecyclerView(rootView);
+
+        return rootView;
+    }
+
+    private void populateIngredientCategoriesInRecyclerView(@NonNull View rootView) {
+        RecyclerView recyclerView = rootView.findViewById(R.id.ingredientCategoriesRecyclerView);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
+                LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        IngredientCategoriesAdapter categoriesAdapter = new IngredientCategoriesAdapter(ingredientsViewModel.getIngredientCategories().getValue());
+        recyclerView.setAdapter(categoriesAdapter);
     }
 }

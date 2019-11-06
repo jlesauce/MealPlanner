@@ -1,19 +1,30 @@
 package org.jls.mealplanner.ui.ingredients;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
+
 public class IngredientsViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<ArrayList<String>> ingredientCategories;
+    private ArrayList<String> ingredientCategoriesList;
 
     public IngredientsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        ingredientCategoriesList = new ArrayList<>();
+        ingredientCategories = new MutableLiveData<>();
+        ingredientCategories.setValue(ingredientCategoriesList);
+
+        initializeCategories();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public MutableLiveData<ArrayList<String>> getIngredientCategories() {
+        return ingredientCategories;
+    }
+
+    private void initializeCategories() {
+        ingredientCategoriesList.add("Protéines");
+        ingredientCategoriesList.add("Légumes");
+        ingredientCategoriesList.add("Féculents");
     }
 }
