@@ -35,7 +35,7 @@ public class IngredientsFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        IngredientCategoriesAdapter categoriesAdapter = new IngredientCategoriesAdapter(ingredientsViewModel.getIngredientCategories().getValue());
+        IngredientCategoriesAdapter categoriesAdapter = new IngredientCategoriesAdapter(ingredientsViewModel.getCategoryItemsData().getValue());
         recyclerView.setAdapter(categoriesAdapter);
     }
 }

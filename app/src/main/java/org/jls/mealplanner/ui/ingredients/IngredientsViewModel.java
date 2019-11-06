@@ -3,28 +3,30 @@ package org.jls.mealplanner.ui.ingredients;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.jls.mealplanner.R;
+
 import java.util.ArrayList;
 
 public class IngredientsViewModel extends ViewModel {
 
-    private MutableLiveData<ArrayList<String>> ingredientCategories;
-    private ArrayList<String> ingredientCategoriesList;
+    private MutableLiveData<ArrayList<CategoryItem>> categoryItemsData;
+    private ArrayList<CategoryItem> categoryItems;
 
     public IngredientsViewModel() {
-        ingredientCategoriesList = new ArrayList<>();
-        ingredientCategories = new MutableLiveData<>();
-        ingredientCategories.setValue(ingredientCategoriesList);
+        categoryItems = new ArrayList<>();
+        categoryItemsData = new MutableLiveData<>();
+        categoryItemsData.setValue(categoryItems);
 
-        initializeCategories();
+        initializeCategoryItems();
     }
 
-    public MutableLiveData<ArrayList<String>> getIngredientCategories() {
-        return ingredientCategories;
+    public MutableLiveData<ArrayList<CategoryItem>> getCategoryItemsData() {
+        return categoryItemsData;
     }
 
-    private void initializeCategories() {
-        ingredientCategoriesList.add("Protéines");
-        ingredientCategoriesList.add("Légumes");
-        ingredientCategoriesList.add("Féculents");
+    private void initializeCategoryItems() {
+        categoryItems.add(new CategoryItem(R.drawable.proteins, "Protéines"));
+        categoryItems.add(new CategoryItem(R.drawable.vegetables, "Légumes"));
+        categoryItems.add(new CategoryItem(R.drawable.carbohydrates, "Féculents"));
     }
 }

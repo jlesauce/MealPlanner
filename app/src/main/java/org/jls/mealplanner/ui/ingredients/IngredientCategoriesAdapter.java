@@ -1,8 +1,8 @@
 package org.jls.mealplanner.ui.ingredients;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,23 +13,23 @@ import java.util.ArrayList;
 
 public class IngredientCategoriesAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
-    private ArrayList<String> categories;
+    private ArrayList<CategoryItem> categoryIems;
 
-    public IngredientCategoriesAdapter(ArrayList<String> categories) {
-        this.categories = categories;
+    public IngredientCategoriesAdapter(ArrayList<CategoryItem> items) {
+        this.categoryIems = items;
     }
 
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TextView textView = (TextView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.ingredient_category_textview, parent, false);
-        return new CategoryViewHolder(textView);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_category_item, parent, false);
+        return new CategoryViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        holder.getTextView().setText(categories.get(position));
+        holder.getCategoryImageView().setImageResource(getCategoryItemAtPosition(position).getImageResource());
+        holder.getCategoryNameTextView().setText(getCategoryItemAtPosition(position).getCategoryName());
     }
 
     @Override
@@ -39,6 +39,10 @@ public class IngredientCategoriesAdapter extends RecyclerView.Adapter<CategoryVi
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return categoryIems.size();
+    }
+
+    private CategoryItem getCategoryItemAtPosition(final int position) {
+        return categoryIems.get(position);
     }
 }
