@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jls.mealplanner.R;
+import org.jls.mealplanner.ingredient.IngredientBaseModel;
+import org.jls.mealplanner.model.SharedDataHolder;
 import org.jls.mealplanner.ui.ingredients.category.IngredientCategory;
 import org.jls.mealplanner.ui.ingredients.ingredient.form.AddNewIngredientActivity;
 
@@ -24,11 +26,13 @@ public class IngredientCategoryActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient_category);
+        IngredientBaseModel ingredientBaseModel = SharedDataHolder.getInstance().getIngredientBaseModel();
 
         ingredientsViewModel =
                 ViewModelProviders.of(this).get(IngredientsViewModel.class);
-
         retrieveIntentData(getIntent());
+        ingredientsViewModel.setIngredientsItemsData(ingredientBaseModel.getListOfIngredientsForCategory(ingredientsViewModel.getIngredientCategory()));
+
         updateCategoryLabel();
         populateIngredientsInRecyclerView();
     }

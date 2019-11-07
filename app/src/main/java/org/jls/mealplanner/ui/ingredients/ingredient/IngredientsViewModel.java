@@ -3,7 +3,6 @@ package org.jls.mealplanner.ui.ingredients.ingredient;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import org.jls.mealplanner.R;
 import org.jls.mealplanner.ingredient.IngredientItem;
 import org.jls.mealplanner.ui.ingredients.category.IngredientCategory;
 
@@ -13,17 +12,13 @@ public class IngredientsViewModel extends ViewModel {
 
     private MutableLiveData<IngredientCategory> ingredientCategory;
     private MutableLiveData<ArrayList<IngredientItem>> ingredientsItemsData;
-    private ArrayList<IngredientItem> ingredientsItems;
 
     public IngredientsViewModel() {
         ingredientCategory = new MutableLiveData<>();
         ingredientCategory.setValue(IngredientCategory.NONE);
 
-        ingredientsItems = new ArrayList<>();
         ingredientsItemsData = new MutableLiveData<>();
-        ingredientsItemsData.setValue(ingredientsItems);
-
-        initializeIngredientItems();
+        ingredientsItemsData.setValue(new ArrayList<IngredientItem>());
     }
 
     public IngredientCategory getIngredientCategory() {
@@ -34,13 +29,11 @@ public class IngredientsViewModel extends ViewModel {
         this.ingredientCategory.setValue(ingredientCategory);
     }
 
-    public MutableLiveData<ArrayList<IngredientItem>> getIngredientsItemsData() {
-        return ingredientsItemsData;
+    public void setIngredientsItemsData(ArrayList<IngredientItem> ingredientsItemsData) {
+        this.ingredientsItemsData.setValue(ingredientsItemsData);
     }
 
-    private void initializeIngredientItems() {
-        ingredientsItems.add(new IngredientItem(R.drawable.icon_default_ingredient, "Tomate"));
-        ingredientsItems.add(new IngredientItem(R.drawable.icon_default_ingredient, "Concombre"));
-        ingredientsItems.add(new IngredientItem(R.drawable.icon_default_ingredient, "Salade"));
+    public MutableLiveData<ArrayList<IngredientItem>> getIngredientsItemsData() {
+        return ingredientsItemsData;
     }
 }

@@ -11,14 +11,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/TextViewTitle"
+            android:id="@+id/addIngredientTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_add_ingredient"
             android:textSize="10pt" />
 
         <EditText
-            android:id="@+id/EditTextName"
+            android:id="@+id/ingredientNameEditText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:autofillHints="@string/autofill_hint_ingredient_name"
@@ -26,7 +26,7 @@
             android:inputType="text" />
 
         <Button
-            android:id="@+id/ButtonSendFeedback"
+            android:id="@+id/confirmAddIngredientButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="addNewIngredient"
