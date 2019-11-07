@@ -14,6 +14,14 @@
         android:textSize="25sp"
         android:textStyle="bold" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addIngredientButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="startAddIngredientActivity"
+        android:src="@android:drawable/ic_input_add" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredientsRecyclerView"
         android:layout_width="match_parent"

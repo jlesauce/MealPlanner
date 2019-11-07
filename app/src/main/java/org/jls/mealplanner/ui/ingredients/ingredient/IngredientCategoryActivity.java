@@ -2,8 +2,10 @@ package org.jls.mealplanner.ui.ingredients.ingredient;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.jls.mealplanner.R;
 import org.jls.mealplanner.ui.ingredients.category.IngredientCategory;
+import org.jls.mealplanner.ui.ingredients.ingredient.form.AddNewIngredientActivity;
 
 public class IngredientCategoryActivity extends AppCompatActivity {
 
@@ -32,7 +35,9 @@ public class IngredientCategoryActivity extends AppCompatActivity {
 
     private void retrieveIntentData(final Intent intent) {
         String categoryId = intent.getStringExtra("category");
-        ingredientsViewModel.setIngredientCategory(IngredientCategory.toIngredientCategory(categoryId));
+        if (categoryId != null && !categoryId.isEmpty()) {
+            ingredientsViewModel.setIngredientCategory(IngredientCategory.toIngredientCategory(categoryId));
+        }
     }
 
     private void updateCategoryLabel() {
@@ -50,5 +55,11 @@ public class IngredientCategoryActivity extends AppCompatActivity {
 
         IngredientsViewAdapter ingredientsAdapter = new IngredientsViewAdapter(ingredientsViewModel.getIngredientsItemsData().getValue());
         recyclerView.setAdapter(ingredientsAdapter);
+    }
+
+    public void startAddIngredientActivity(@NonNull final View view) {
+        Intent intent = new Intent(this, AddNewIngredientActivity.class);
+        intent.putExtra("category", ingredientsViewModel.getIngredientCategory().id());
+        startActivity(intent);
     }
 }

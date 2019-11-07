@@ -9,4 +9,9 @@
     <string name="label_dinner">Soir</string>
     <string name="label_categories">Catégories</string>
     <string name="label_category">Catégorie</string>
+    <string name="label_add_ingredient">Nouvel ingrédient</string>
+    <string name="title_add_ingredient">Ajouter votre ingrédient:</string>
+    <string name="hint_ingredient_name">Nom de l\'ingrédient</string>
+    <string name="autofill_hint_ingredient_name">Nom</string>
+    <string name="button_label_add_ingredient">Ajouter</string>
 </resources>

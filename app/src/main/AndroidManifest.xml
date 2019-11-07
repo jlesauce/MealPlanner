@@ -42,6 +42,9 @@
             android:label="@string/label_category"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".ui.ingredients.ingredient.form.AddNewIngredientActivity"
+            android:label="@string/label_add_ingredient"
+            android:parentActivityName=".ui.ingredients.ingredient.IngredientCategoryActivity" />
     </application>
-
 </manifest>
