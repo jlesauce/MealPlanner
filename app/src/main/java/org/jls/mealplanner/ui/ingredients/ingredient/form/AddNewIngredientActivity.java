@@ -11,6 +11,7 @@ import android.widget.EditText;
 import org.jls.mealplanner.R;
 import org.jls.mealplanner.ingredient.IngredientBaseController;
 import org.jls.mealplanner.ingredient.IngredientBaseModel;
+import org.jls.mealplanner.model.SharedDataHolder;
 import org.jls.mealplanner.ui.ingredients.category.IngredientCategory;
 
 public class AddNewIngredientActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class AddNewIngredientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_ingredient);
         ingredientCategory = IngredientCategory.NONE;
-        ingredientBaseController = new IngredientBaseController(new IngredientBaseModel());
+        ingredientBaseController = new IngredientBaseController(SharedDataHolder.getInstance().getIngredientBaseModel());
 
         retrieveIntentData(getIntent());
     }
@@ -35,6 +36,7 @@ public class AddNewIngredientActivity extends AppCompatActivity {
         if (!ingredientName.isEmpty()) {
             ingredientBaseController.addNewIngredient(ingredientCategory, ingredientName);
         }
+        finish();
     }
 
     private void retrieveIntentData(final Intent intent) {

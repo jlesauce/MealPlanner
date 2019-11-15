@@ -8,16 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jls.mealplanner.R;
-import org.jls.mealplanner.ingredient.IngredientItem;
+import org.jls.mealplanner.ingredient.Ingredient;
 
 import java.util.ArrayList;
 
 public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
 
-    private ArrayList<IngredientItem> ingredientItems;
+    private ArrayList<Ingredient> ingredients;
 
-    public IngredientsViewAdapter(ArrayList<IngredientItem> items) {
-        this.ingredientItems = items;
+    public IngredientsViewAdapter(ArrayList<Ingredient> items) {
+        this.ingredients = items;
     }
 
     @NonNull
@@ -40,10 +40,14 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
 
     @Override
     public int getItemCount() {
-        return ingredientItems.size();
+        return ingredients.size();
     }
 
-    private IngredientItem getIngredientItemAtPosition(final int position) {
-        return ingredientItems.get(position);
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    private Ingredient getIngredientItemAtPosition(final int position) {
+        return ingredients.get(position);
     }
 }

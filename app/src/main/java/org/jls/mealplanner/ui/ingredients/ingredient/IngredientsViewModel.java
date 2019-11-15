@@ -3,7 +3,7 @@ package org.jls.mealplanner.ui.ingredients.ingredient;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import org.jls.mealplanner.ingredient.IngredientItem;
+import org.jls.mealplanner.ingredient.Ingredient;
 import org.jls.mealplanner.ui.ingredients.category.IngredientCategory;
 
 import java.util.ArrayList;
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 public class IngredientsViewModel extends ViewModel {
 
     private MutableLiveData<IngredientCategory> ingredientCategory;
-    private MutableLiveData<ArrayList<IngredientItem>> ingredientsItemsData;
+    private MutableLiveData<ArrayList<Ingredient>> ingredientsItemsData;
 
     public IngredientsViewModel() {
         ingredientCategory = new MutableLiveData<>();
         ingredientCategory.setValue(IngredientCategory.NONE);
 
         ingredientsItemsData = new MutableLiveData<>();
-        ingredientsItemsData.setValue(new ArrayList<IngredientItem>());
+        ingredientsItemsData.setValue(new ArrayList<Ingredient>());
     }
 
     public IngredientCategory getIngredientCategory() {
@@ -29,11 +29,11 @@ public class IngredientsViewModel extends ViewModel {
         this.ingredientCategory.setValue(ingredientCategory);
     }
 
-    public void setIngredientsItemsData(ArrayList<IngredientItem> ingredientsItemsData) {
+    public void setIngredientsItemsData(ArrayList<Ingredient> ingredientsItemsData) {
         this.ingredientsItemsData.setValue(ingredientsItemsData);
     }
 
-    public MutableLiveData<ArrayList<IngredientItem>> getIngredientsItemsData() {
+    public MutableLiveData<ArrayList<Ingredient>> getIngredientsItemsData() {
         return ingredientsItemsData;
     }
 }

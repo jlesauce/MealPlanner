@@ -2,13 +2,13 @@ package org.jls.mealplanner.ingredient;
 
 import androidx.annotation.DrawableRes;
 
-public class IngredientItem {
+public class Ingredient {
 
     @DrawableRes
     private int imageResource;
     private String ingredientName;
 
-    public IngredientItem(@DrawableRes int imageResource, String ingredientName) {
+    public Ingredient(@DrawableRes int imageResource, String ingredientName) {
         this.imageResource = imageResource;
         this.ingredientName = ingredientName;
     }

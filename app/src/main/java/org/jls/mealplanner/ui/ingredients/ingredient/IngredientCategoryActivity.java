@@ -20,7 +20,10 @@ import org.jls.mealplanner.ui.ingredients.ingredient.form.AddNewIngredientActivi
 
 public class IngredientCategoryActivity extends AppCompatActivity {
 
+    private static final int ADD_NEW_INGREDIENT_REQUEST = 1;
+
     private IngredientsViewModel ingredientsViewModel;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +40,13 @@ public class IngredientCategoryActivity extends AppCompatActivity {
         populateIngredientsInRecyclerView();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == ADD_NEW_INGREDIENT_REQUEST) {
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }
+    }
+
     private void retrieveIntentData(final Intent intent) {
         String categoryId = intent.getStringExtra("category");
         if (categoryId != null && !categoryId.isEmpty()) {
@@ -51,7 +61,7 @@ public class IngredientCategoryActivity extends AppCompatActivity {
     }
 
     private void populateIngredientsInRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.ingredientsRecyclerView);
+        recyclerView = findViewById(R.id.ingredientsRecyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
@@ -64,6 +74,6 @@ public class IngredientCategoryActivity extends AppCompatActivity {
     public void startAddIngredientActivity(@NonNull final View view) {
         Intent intent = new Intent(this, AddNewIngredientActivity.class);
         intent.putExtra("category", ingredientsViewModel.getIngredientCategory().id());
-        startActivity(intent);
+        startActivityForResult(intent, ADD_NEW_INGREDIENT_REQUEST);
     }
 }
