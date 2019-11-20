@@ -4,20 +4,20 @@ import androidx.annotation.DrawableRes;
 
 public class Ingredient {
 
+    private String name;
     @DrawableRes
     private int imageResource;
-    private String ingredientName;
 
-    public Ingredient(@DrawableRes int imageResource, String ingredientName) {
+    public Ingredient(String name, @DrawableRes int imageResource) {
+        this.name = name;
         this.imageResource = imageResource;
-        this.ingredientName = ingredientName;
+    }
+
+    public String getIngredientName() {
+        return name;
     }
 
     public int getImageResource() {
         return imageResource;
-    }
-
-    public String getIngredientName() {
-        return ingredientName;
     }
 }

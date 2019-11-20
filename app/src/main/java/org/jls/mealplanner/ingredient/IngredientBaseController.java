@@ -10,9 +10,9 @@ public class IngredientBaseController {
         model = ingredientBaseModel;
     }
 
-    public void addNewIngredient(final IngredientCategory category, final String name) {
+    public void addNewIngredient(final String name, final IngredientCategory category) {
         if (checkIngredientName(name)) {
-            model.addNewIngredient(category, name);
+            model.addNewIngredient(name, category);
         }
     }
 

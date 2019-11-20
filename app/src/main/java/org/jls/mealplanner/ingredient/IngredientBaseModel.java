@@ -16,33 +16,14 @@ public class IngredientBaseModel {
         ingredients.put(IngredientCategory.VEGETABLES, new ArrayList<Ingredient>());
         ingredients.put(IngredientCategory.CARBOHYDRATES, new ArrayList<Ingredient>());
         ingredients.put(IngredientCategory.NONE, new ArrayList<Ingredient>());
-
-        createDummyIngredients();
     }
 
-    public void addNewIngredient(final IngredientCategory category, final String name) {
-        Ingredient ingredient = new Ingredient(R.drawable.icon_default_ingredient, name);
+    public void addNewIngredient(final String name, final IngredientCategory category) {
+        Ingredient ingredient = new Ingredient(name, R.drawable.icon_default_ingredient);
         ingredients.get(category).add(ingredient);
     }
 
     public ArrayList<Ingredient> getListOfIngredientsForCategory(final IngredientCategory category) {
         return ingredients.get(category);
-    }
-
-    private void createDummyIngredients() {
-        ArrayList<Ingredient> proteins = ingredients.get(IngredientCategory.PROTEINS);
-        proteins.add(new Ingredient(R.drawable.icon_default_ingredient, "Steack hâché"));
-        proteins.add(new Ingredient(R.drawable.icon_default_ingredient, "Poisson"));
-        proteins.add(new Ingredient(R.drawable.icon_default_ingredient, "Saucisse"));
-
-        ArrayList<Ingredient> vegetables = ingredients.get(IngredientCategory.VEGETABLES);
-        vegetables.add(new Ingredient(R.drawable.icon_default_ingredient, "Courgette"));
-        vegetables.add(new Ingredient(R.drawable.icon_default_ingredient, "Tomate"));
-        vegetables.add(new Ingredient(R.drawable.icon_default_ingredient, "Carotte"));
-
-        ArrayList<Ingredient> carbohydrates = ingredients.get(IngredientCategory.CARBOHYDRATES);
-        carbohydrates.add(new Ingredient(R.drawable.icon_default_ingredient, "Pâtes"));
-        carbohydrates.add(new Ingredient(R.drawable.icon_default_ingredient, "Riz"));
-        carbohydrates.add(new Ingredient(R.drawable.icon_default_ingredient, "Lentilles"));
     }
 }

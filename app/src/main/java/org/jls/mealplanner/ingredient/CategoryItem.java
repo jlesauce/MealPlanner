@@ -11,7 +11,9 @@ public class CategoryItem {
     private int imageResource;
     private String categoryDisplayName;
 
-    public CategoryItem(IngredientCategory ingredientCategory, @DrawableRes int imageResource, String categoryDisplayName) {
+    public CategoryItem(IngredientCategory ingredientCategory,
+                        @DrawableRes int imageResource,
+                        String categoryDisplayName) {
         this.ingredientCategory = ingredientCategory;
         this.imageResource = imageResource;
         this.categoryDisplayName = categoryDisplayName;

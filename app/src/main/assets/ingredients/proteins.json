@@ -1,0 +1,12 @@
+{
+  "proteins": [
+    {
+      "id": "meat",
+      "label": "Viande"
+    },
+    {
+      "id": "fish",
+      "label": "Poisson"
+    }
+  ]
+}

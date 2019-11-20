@@ -1,0 +1,108 @@
+{
+  "vegetables": [
+    {
+      "id": "salad",
+      "label": "Salade"
+    },
+    {
+      "id": "tomat",
+      "label": "Tomate"
+    },
+    {
+      "id": "carot",
+      "label": "Carotte"
+    },
+    {
+      "id": "cabbage",
+      "label": "Chou"
+    },
+    {
+      "id": "white_cabbage",
+      "label": "Chou blanc"
+    },
+    {
+      "id": "red_cabbage",
+      "label": "Chou rouge"
+    },
+    {
+      "id": "curly_cabbage",
+      "label": "Chou frisé"
+    },
+    {
+      "id": "beetroot",
+      "label": "Betterave"
+    },
+    {
+      "id": "chicory",
+      "label": "Endive"
+    },
+    {
+      "id": "radish",
+      "label": "Radis"
+    },
+    {
+      "id": "broccoli",
+      "label": "Brocoli"
+    },
+    {
+      "id": "spinach",
+      "label": "Epinard"
+    },
+    {
+      "id": "zucchini",
+      "label": "Courgette"
+    },
+    {
+      "id": "artichoke",
+      "label": "Artichaut"
+    },
+    {
+      "id": "asparagus",
+      "label": "Asperge"
+    },
+    {
+      "id": "celery",
+      "label": "Céleri"
+    },
+    {
+      "id": "mushroom",
+      "label": "Champignon"
+    },
+    {
+      "id": "cauliflower",
+      "label": "Chou fleur"
+    },
+    {
+      "id": "fennel",
+      "label": "Fenouil"
+    },
+    {
+      "id": "green bean",
+      "label": "Haricot vert"
+    },
+    {
+      "id": "turnip",
+      "label": "Navet"
+    },
+    {
+      "id": "onion",
+      "label": "Oignon"
+    },
+    {
+      "id": "parsnip",
+      "label": "Panais"
+    },
+    {
+      "id": "leek",
+      "label": "Poireau"
+    },
+    {
+      "id": "salsify",
+      "label": "Salsifis"
+    },
+    {
+      "id": "pumpkin",
+      "label": "Potiron"
+    }
+  ]
+}

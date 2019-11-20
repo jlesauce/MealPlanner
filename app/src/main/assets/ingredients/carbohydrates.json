@@ -1,0 +1,36 @@
+{
+  "carbohydrates": [
+    {
+      "id": "semolina",
+      "label": "Semoule"
+    },
+    {
+      "id": "pasta",
+      "label": "Pâtes"
+    },
+    {
+      "id": "bulgur",
+      "label": "Boulgour"
+    },
+    {
+      "id": "rice",
+      "label": "Riz"
+    },
+    {
+      "id": "potato",
+      "label": "Pommes de terre"
+    },
+    {
+      "id": "quinoa",
+      "label": "Quinoa"
+    },
+    {
+      "id": "lentils",
+      "label": "Lentilles"
+    },
+    {
+      "id": "sweet potato",
+      "label": "Patate douce"
+    }
+  ]
+}
