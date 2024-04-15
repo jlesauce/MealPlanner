@@ -1,4 +1,4 @@
-package com.example.mealplanner;
+package com.example.mealplanner.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,12 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class PlanningFragment extends Fragment {
+import com.example.mealplanner.R;
+
+public class RecipesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_planning, container, false);
+        return inflater.inflate(R.layout.fragment_recipes, container, false);
     }
 }

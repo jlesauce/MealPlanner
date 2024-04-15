@@ -5,7 +5,15 @@
     <string name="close">Fermer</string>
     <string name="planning">Planning</string>
     <string name="ingredients">Ingrédients</string>
+    <string name="ingredient">Ingrédient</string>
     <string name="recipes">Recettes</string>
     <string name="settings">Paramètres</string>
     <string name="about">A Propos</string>
+    <string name="my_ingredients">Mon Frigo</string>
+    <string name="manage_ingredients">Gérer</string>
+    <string name="grocery_list">Liste de courses</string>
+    <string name="meals">Mes Repas</string>
+    <string name="all_recipes">Recettes</string>
+    <string name="favorites">Favoris</string>
+    <string name="add_to_grocery_list">Ajouter à la liste</string>
 </resources>
