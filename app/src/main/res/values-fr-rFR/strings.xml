@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="application_name">Mes Repas</string>
+    <string name="open">Ouvrir</string>
+    <string name="close">Fermer</string>
+    <string name="planning">Planning</string>
+    <string name="ingredients">Ingrédients</string>
+    <string name="recipes">Recettes</string>
+    <string name="settings">Paramètres</string>
+    <string name="about">A Propos</string>
+</resources>

@@ -1,17 +1,10 @@
 <resources>
-    <string name="app_name">Meal Planner</string>
-    <string name="icon">Icon</string>
-    <string name="title_calendar">Calendrier</string>
-    <string name="title_ingredients">Ingrédients</string>
-    <string name="title_shopping_list">Liste d\'achats</string>
-    <string name="title_day">Journée</string>
-    <string name="label_lunch">Midi</string>
-    <string name="label_dinner">Soir</string>
-    <string name="label_categories">Catégories</string>
-    <string name="label_category">Catégorie</string>
-    <string name="label_add_ingredient">Nouvel ingrédient</string>
-    <string name="title_add_ingredient">Ajouter votre ingrédient:</string>
-    <string name="hint_ingredient_name">Nom de l\'ingrédient</string>
-    <string name="autofill_hint_ingredient_name">Nom</string>
-    <string name="button_label_add_ingredient">Ajouter</string>
+    <string name="application_name">Meal Planner</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="planning">Planning</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="recipes">Recipes</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
 </resources>

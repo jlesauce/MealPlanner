@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/menu_group_navigation">
+        <item
+            android:id="@+id/menu_planning"
+            android:icon="@drawable/planning_icon"
+            android:title="@string/planning" />
+        <item
+            android:id="@+id/menu_ingredients"
+            android:icon="@drawable/ingredients_icon"
+            android:title="@string/ingredients" />
+        <item
+            android:id="@+id/menu_recipes"
+            android:icon="@drawable/recipes_icon"
+            android:title="@string/recipes" />
+    </group>
+
+    <group android:id="@+id/menu_group_settings">
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/settings_icon"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/menu_about"
+            android:icon="@drawable/about_icon"
+            android:title="@string/about" />
+    </group>
+
+
+</menu>
