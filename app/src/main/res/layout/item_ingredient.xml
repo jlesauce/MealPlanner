@@ -33,7 +33,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorSecondary"
         android:contentDescription="@string/add_to_grocery_list"
-        app:srcCompat="@drawable/add_to_grocery_list_icon" />
+        app:srcCompat="@drawable/grocery_list_icon_disabled" />
 
     <CheckBox
         android:id="@+id/addToMyIngredientsCheckBox"

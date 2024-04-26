@@ -19,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.mealplanner.model.SharedDataHolder;
 import com.example.mealplanner.ui.PlanningFragment;
 import com.example.mealplanner.ui.RecipesFragment;
+import com.example.mealplanner.ui.ingredients.IngredientsController;
 import com.example.mealplanner.ui.ingredients.IngredientsFragment;
 import com.example.mealplanner.utils.PushBulletClient;
 import com.google.android.material.navigation.NavigationView;

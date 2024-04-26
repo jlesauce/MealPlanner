@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mealplanner.IngredientsController;
 import com.example.mealplanner.R;
 import com.example.mealplanner.model.Ingredient;
 import com.example.mealplanner.model.SharedDataHolder;
@@ -20,13 +19,16 @@ import java.util.ArrayList;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
 
-    private ArrayList<Ingredient> ingredientsList;
     private final IngredientsController controller;
+    private final IngredientVisibility ingredientsVisibility;
+    private ArrayList<Ingredient> ingredients;
 
-    public IngredientAdapter(IngredientsController controller, ArrayList<Ingredient> ingredientsList) {
+    public IngredientAdapter(final IngredientsController controller, final IngredientVisibility ingredientVisibility) {
+        SharedDataHolder sharedDataHolder = SharedDataHolder.getInstance();
         this.controller = controller;
-        this.ingredientsList = ingredientsList;
-        SharedDataHolder.getInstance().addObserver(this::notifyDataSetChanged);
+        sharedDataHolder.addObserver(this::updateIngredientsList);
+        this.ingredientsVisibility = ingredientVisibility;
+        ingredients = controller.getIngredients(ingredientVisibility);
     }
 
     @NonNull
@@ -37,39 +39,53 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     }
 
     @Override
-    public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
-        Ingredient currentIngredientItem = ingredientsList.get(position);
+    public void onBindViewHolder(@NonNull IngredientViewHolder holder, final int position) {
+        Ingredient currentIngredientItem = ingredients.get(position);
+        initIngredientItem(holder, currentIngredientItem);
 
-        holder.ingredientName.setText(currentIngredientItem.getIngredientName());
-        holder.ingredientIcon.setImageResource(currentIngredientItem.getImageResource());
-        holder.addToMyIngredientsCheckBox.setChecked(currentIngredientItem.isPossessed());
+    }
 
-        holder.addIngredientToGroceryList.setOnClickListener(v -> {
-            if (!currentIngredientItem.isInGroceryList()) {
-                SharedDataHolder.getInstance().addIngredientToGroceryList(currentIngredientItem.getIngredientName());
-            } else {
-                SharedDataHolder.getInstance().removeIngredientFromGroceryList(
-                        currentIngredientItem.getIngredientName());
-            }
-        });
+    private void initIngredientItem(@NonNull IngredientViewHolder holder, final Ingredient ingredient) {
+        holder.ingredientName.setText(ingredient.getIngredientName());
+        holder.ingredientIcon.setImageResource(ingredient.getImageResource());
+        holder.addToMyIngredientsCheckBox.setChecked(ingredient.isPossessed());
 
-        holder.addToMyIngredientsCheckBox.setOnClickListener(v -> {
-            if (currentIngredientItem.isPossessed()) {
-                SharedDataHolder.getInstance().removeIngredientFromMyStock(currentIngredientItem.getIngredientName());
-            } else {
-                SharedDataHolder.getInstance().addIngredientToMyStock(currentIngredientItem.getIngredientName());
-            }
-        });
+        holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList());
+
+        // Add listeners
+        holder.addIngredientToGroceryList.setOnClickListener(
+                v -> ingredientInGroceryListButtonClicked(holder, ingredient));
+        holder.addToMyIngredientsCheckBox.setOnClickListener(
+                v -> ingredientInMyIngredientsCheckBoxClicked(holder, ingredient));
+    }
+
+    private void ingredientInGroceryListButtonClicked(IngredientViewHolder holder, final Ingredient ingredient) {
+        if (ingredient.isInGroceryList()) {
+            controller.removeIngredientFromGroceryList(ingredient);
+            holder.updateIngredientInGroceryListButton(false);
+        } else {
+            controller.addIngredientToGroceryList(ingredient);
+            holder.updateIngredientInGroceryListButton(true);
+        }
+    }
+
+    private void ingredientInMyIngredientsCheckBoxClicked(IngredientViewHolder holder, final Ingredient ingredient) {
+        if (ingredient.isPossessed()) {
+            controller.removeIngredientFromMyIngredients(ingredient);
+        } else {
+            controller.addIngredientToMyIngredients(ingredient);
+        }
     }
 
     private void updateIngredientsList() {
-        this.ingredientsList = SharedDataHolder.getInstance().getMyIngredients();
+        this.ingredients = controller.getIngredients(ingredientsVisibility);
         notifyDataSetChanged();
     }
 
+
     @Override
     public int getItemCount() {
-        return ingredientsList.size();
+        return ingredients.size();
     }
 
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {
@@ -84,6 +100,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
             ingredientName = itemView.findViewById(R.id.ingredientName);
             addIngredientToGroceryList = itemView.findViewById(R.id.addIngredientToGroceryList);
             addToMyIngredientsCheckBox = itemView.findViewById(R.id.addToMyIngredientsCheckBox);
+        }
+
+        public void updateIngredientInGroceryListButton(boolean isInGroceryList) {
+            addIngredientToGroceryList.setImageResource(
+                    isInGroceryList ? R.drawable.grocery_list_icon_enabled : R.drawable.grocery_list_icon_disabled);
         }
     }
 }

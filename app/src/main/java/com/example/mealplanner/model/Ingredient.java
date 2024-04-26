@@ -20,8 +20,7 @@ public class Ingredient {
 
     public Ingredient(@NonNull String name, @DrawableRes int imageResource, boolean isPossessed,
                       boolean isInGroceryList) {
-        this.name = name;
-        this.imageResource = imageResource;
+        this(name, imageResource);
         this.isPossessed = isPossessed;
         this.isInGroceryList = isInGroceryList;
     }

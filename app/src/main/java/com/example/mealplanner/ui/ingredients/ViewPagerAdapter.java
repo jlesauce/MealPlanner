@@ -6,14 +6,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.mealplanner.IngredientsController;
-
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
     private final static int NB_OF_TABS = 3;
     private final IngredientsController controller;
 
-    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, IngredientsController controller) {
+    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle,
+                            IngredientsController controller) {
         super(fragmentManager, lifecycle);
         this.controller = controller;
     }

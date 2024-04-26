@@ -2,7 +2,6 @@ package com.example.mealplanner.model;
 
 import com.example.mealplanner.R;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +23,10 @@ public class SharedDataHolder {
 
     public void addObserver(Runnable observer) {
         observers.add(observer);
+    }
+
+    public void notifyDataChanged() {
+        notifyObservers();
     }
 
     private void notifyObservers() {
@@ -75,66 +78,6 @@ public class SharedDataHolder {
 
     public HashMap<String, Ingredient> getIngredients() {
         return ingredients;
-    }
-
-    public ArrayList<Ingredient> getMyIngredients() {
-        ArrayList<Ingredient> myIngredients = new ArrayList<>();
-        for (Ingredient ingredient : ingredients.values()) {
-            if (ingredient.isPossessed()) {
-                myIngredients.add(ingredient);
-            }
-        }
-        return myIngredients;
-    }
-
-    public ArrayList<Ingredient> getGroceryList() {
-        ArrayList<Ingredient> myIngredients = new ArrayList<>();
-        for (Ingredient ingredient : ingredients.values()) {
-            if (ingredient.isInGroceryList()) {
-                myIngredients.add(ingredient);
-            }
-        }
-        return myIngredients;
-    }
-
-    public void addIngredientToGroceryList(String ingredientName) {
-        Ingredient ingredient = getIngredients().get(ingredientName);
-        if (ingredient != null) {
-            ingredient.setInGroceryList(true);
-            notifyObservers();
-        } else {
-            throw new IllegalArgumentException("Ingredient not found in the list : name= " + ingredientName);
-        }
-    }
-
-    public void removeIngredientFromGroceryList(String ingredientName) {
-        Ingredient ingredient = getIngredients().get(ingredientName);
-        if (ingredient != null) {
-            ingredient.setInGroceryList(false);
-            notifyObservers();
-        } else {
-            throw new IllegalArgumentException("Ingredient not found in the list : name= " + ingredientName);
-        }
-    }
-
-    public void addIngredientToMyStock(String ingredientName) {
-        Ingredient ingredient = getIngredients().get(ingredientName);
-        if (ingredient != null) {
-            ingredient.setPossessed(true);
-            notifyObservers();
-        } else {
-            throw new IllegalArgumentException("Ingredient not found in the list");
-        }
-    }
-
-    public void removeIngredientFromMyStock(String ingredientName) {
-        Ingredient ingredient = getIngredients().get(ingredientName);
-        if (ingredient != null) {
-            ingredient.setPossessed(false);
-            notifyObservers();
-        } else {
-            throw new IllegalArgumentException("Ingredient not found in the list");
-        }
     }
 
     public boolean isTestRequestSent() {

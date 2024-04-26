@@ -11,13 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mealplanner.IngredientsController;
 import com.example.mealplanner.R;
-import com.example.mealplanner.model.Ingredient;
-import com.example.mealplanner.model.SharedDataHolder;
-
-import java.util.ArrayList;
-
 
 public class GroceryListFragment extends Fragment {
 
@@ -28,17 +22,15 @@ public class GroceryListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_groceries_list, container, false);
-        ArrayList<Ingredient> ingredientList = SharedDataHolder.getInstance().getGroceryList();
 
         RecyclerView recyclerView = view.findViewById(R.id.groceryListRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         addItemDivider(recyclerView);
 
-        IngredientAdapter adapter = new IngredientAdapter(controller, ingredientList);
+        IngredientAdapter adapter = new IngredientAdapter(controller, IngredientVisibility.MY_GROCERY_LIST);
         recyclerView.setAdapter(adapter);
 
         return view;
