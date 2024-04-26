@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mealplanner.IngredientsController;
 import com.example.mealplanner.R;
 import com.example.mealplanner.model.Ingredient;
 import com.example.mealplanner.model.SharedDataHolder;
@@ -20,24 +21,32 @@ import java.util.ArrayList;
 
 public class MyIngredientsFragment extends Fragment {
 
+    private final IngredientsController controller;
+
+    public MyIngredientsFragment(IngredientsController controller) {
+        this.controller = controller;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_my_ingredients, container, false);
-
-        ArrayList<Ingredient> ingredientList = new ArrayList<>(SharedDataHolder.getInstance().getIngredients().values());
+        ArrayList<Ingredient> ingredientList = SharedDataHolder.getInstance().getMyIngredients();
 
         RecyclerView recyclerView = view.findViewById(R.id.myIngredientsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        // Add item divider
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ingredients_list_divider));
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        addItemDivider(recyclerView);
 
-        IngredientAdapter adapter = new IngredientAdapter(ingredientList);
+        IngredientAdapter adapter = new IngredientAdapter(controller, ingredientList);
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    private void addItemDivider(RecyclerView recyclerView) {
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ingredients_list_divider));
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 }

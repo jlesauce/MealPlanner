@@ -6,9 +6,8 @@
     android:orientation="vertical"
     tools:context=".ui.ingredients.GroceryListFragment">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/groceryListRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Groceries list" />
+        android:layout_height="match_parent" />
 </LinearLayout>

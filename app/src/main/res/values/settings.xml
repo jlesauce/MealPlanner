@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="ask_user_password">false</bool>
+    <string name="push_bullet_api_key" translatable="false">#1234</string>
+</resources>

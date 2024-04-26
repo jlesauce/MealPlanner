@@ -28,7 +28,7 @@
         android:textSize="20sp" />
 
     <ImageButton
-        android:id="@+id/addIngredientToListButton"
+        android:id="@+id/addIngredientToGroceryList"
         android:layout_width="30dp"
         android:layout_height="match_parent"
         android:background="@color/colorSecondary"
