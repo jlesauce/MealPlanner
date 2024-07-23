@@ -37,6 +37,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         sharedDataHolder = SharedDataHolder.getInstance();
 
+        create_ui(savedInstanceState);
+        send_user_test_request_if_not_already_sent();
+    }
+
+    private void create_ui(Bundle savedInstanceState) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -52,18 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new PlanningFragment()).commit();
-            navigationView.setCheckedItem(R.id.menu_planning);
-        }
-
-        if (getResources().getBoolean(R.bool.ask_user_password)) {
-            if (!sharedDataHolder.isTestRequestSent()) {
-                askUserTest(drawerLayout.getContext());
-                sharedDataHolder.setTestRequestSent(true);
-            }
-        }
+        select_planning_fragment(savedInstanceState, navigationView);
     }
 
     @Override
@@ -90,6 +84,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private void select_planning_fragment(Bundle savedInstanceState, NavigationView navigationView) {
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new PlanningFragment()).commit();
+            navigationView.setCheckedItem(R.id.menu_planning);
+        }
+    }
+
+    private void send_user_test_request_if_not_already_sent() {
+        if (getResources().getBoolean(R.bool.ask_user_password)) {
+            if (!sharedDataHolder.isTestRequestSent()) {
+                askUserTest(drawerLayout.getContext());
+                sharedDataHolder.setTestRequestSent(true);
+            }
         }
     }
 
