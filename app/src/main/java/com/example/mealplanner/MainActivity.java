@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +17,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.mealplanner.database.ApplicationDatabase;
+import com.example.mealplanner.model.IngredientViewModel;
 import com.example.mealplanner.model.SharedDataHolder;
 import com.example.mealplanner.ui.PlanningFragment;
 import com.example.mealplanner.ui.RecipesFragment;
 import com.example.mealplanner.ui.ingredients.IngredientsController;
 import com.example.mealplanner.ui.ingredients.IngredientsFragment;
+import com.example.mealplanner.utils.DatabaseHelper;
 import com.example.mealplanner.utils.PushBulletClient;
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,7 +39,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         sharedDataHolder = SharedDataHolder.getInstance();
+        copyDefaultDatabaseToLocalStorage();
+        ApplicationDatabase.initializeInstance(this);
+
+        IngredientViewModel ingredientViewModel = new IngredientViewModel(getApplication());
+        sharedDataHolder.setIngredientsViewModel(ingredientViewModel);
 
         create_ui(savedInstanceState);
         send_user_test_request_if_not_already_sent();
@@ -57,7 +67,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        addHandleBackPressedCallback();
+
         select_planning_fragment(savedInstanceState, navigationView);
+    }
+
+    private void addHandleBackPressedCallback() {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                        getSupportFragmentManager().popBackStack();
+                    } else {
+                        finish();
+                    }
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -76,15 +106,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     private void select_planning_fragment(Bundle savedInstanceState, NavigationView navigationView) {
@@ -129,6 +150,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             client.pushNote("From Android", message);
             sharedDataHolder.setTestRequestSent(true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void copyDefaultDatabaseToLocalStorage() {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        try {
+            dbHelper.copyDefaultDatabaseToLocalStorage();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
