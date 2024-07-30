@@ -14,12 +14,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class IngredientsFragment extends Fragment {
 
-    private final IngredientsController controller;
-
-    public IngredientsFragment(IngredientsController ingredientsController) {
-        this.controller = ingredientsController;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -32,7 +26,7 @@ public class IngredientsFragment extends Fragment {
 
         TabLayout tabLayout = view.findViewById(R.id.ingredientsTabLayout);
         ViewPager2 viewPager = view.findViewById(R.id.ingredientsViewPager);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), getLifecycle(), controller);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(tabTitles[position])).attach();

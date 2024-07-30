@@ -7,19 +7,17 @@ import android.view.ViewGroup;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mealplanner.R;
+import com.jls.mealplanner.model.IngredientViewModel;
+
+import java.util.Objects;
 
 public class GroceryListFragment extends Fragment {
-
-    private final IngredientsController controller;
-
-    public GroceryListFragment(IngredientsController controller) {
-        this.controller = controller;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,7 +28,10 @@ public class GroceryListFragment extends Fragment {
 
         addItemDivider(recyclerView);
 
-        IngredientAdapter adapter = new IngredientAdapter(controller, IngredientVisibility.MY_GROCERY_LIST);
+        IngredientViewModel ingredientsViewModel = new ViewModelProvider(requireActivity())
+                .get(IngredientViewModel.class);
+        IngredientAdapter adapter = new IngredientAdapter(this, ingredientsViewModel,
+                                                          IngredientVisibility.MY_GROCERY_LIST);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -38,8 +39,10 @@ public class GroceryListFragment extends Fragment {
 
     private void addItemDivider(RecyclerView recyclerView) {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ingredients_list_divider));
+                                                                                DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(
+                Objects.requireNonNull(
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ingredients_list_divider)));
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 }

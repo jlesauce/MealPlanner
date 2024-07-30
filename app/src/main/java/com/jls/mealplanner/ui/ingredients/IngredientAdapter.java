@@ -9,26 +9,53 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mealplanner.R;
-import com.jls.mealplanner.model.Ingredient;
-import com.jls.mealplanner.model.SharedDataHolder;
+import com.jls.mealplanner.database.IngredientEntity;
+import com.jls.mealplanner.model.IngredientViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>
+        implements Observer<List<IngredientEntity>> {
 
-    private final IngredientsController controller;
+    private final IngredientViewModel ingredientsViewModel;
     private final IngredientVisibility ingredientsVisibility;
-    private ArrayList<Ingredient> ingredients;
+    private final ArrayList<IngredientEntity> ingredients;
 
-    public IngredientAdapter(final IngredientsController controller, final IngredientVisibility ingredientVisibility) {
-        SharedDataHolder sharedDataHolder = SharedDataHolder.getInstance();
-        this.controller = controller;
-        sharedDataHolder.addObserver(this::updateIngredientsList);
+    public IngredientAdapter(Fragment fragment, IngredientViewModel viewModel,
+                             final IngredientVisibility ingredientVisibility) {
+        this.ingredientsViewModel = viewModel;
         this.ingredientsVisibility = ingredientVisibility;
-        ingredients = controller.getIngredients(ingredientVisibility);
+        this.ingredientsViewModel.getAllIngredients().observe(fragment, this);
+        this.ingredients = new ArrayList<>();
+    }
+
+    @Override
+    public void onChanged(@Nullable final List<IngredientEntity> allIngredients) {
+        IngredientVisibility v = ingredientsVisibility;
+
+        if (allIngredients == null) {
+            return;
+        }
+
+        ingredients.clear();
+        for (IngredientEntity ingredient : allIngredients) {
+            if (v == IngredientVisibility.MY_STOCK && ingredient.isPossessed) {
+                ingredients.add(ingredient);
+            } else if (v == IngredientVisibility.MY_GROCERY_LIST && ingredient.isInGroceryList) {
+                ingredients.add(ingredient);
+            } else if (v == IngredientVisibility.ALL_INGREDIENTS) {
+                ingredients.add(ingredient);
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -40,17 +67,16 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, final int position) {
-        Ingredient currentIngredientItem = ingredients.get(position);
-        initIngredientItem(holder, currentIngredientItem);
-
+        IngredientEntity currentIngredient = ingredients.get(position);
+        initIngredientItem(holder, currentIngredient);
     }
 
-    private void initIngredientItem(@NonNull IngredientViewHolder holder, final Ingredient ingredient) {
-        holder.ingredientName.setText(ingredient.getIngredientName());
-        holder.ingredientIcon.setImageResource(ingredient.getImageResource());
-        holder.addToMyIngredientsCheckBox.setChecked(ingredient.isPossessed());
+    private void initIngredientItem(@NonNull IngredientViewHolder holder, final IngredientEntity ingredient) {
+        holder.ingredientName.setText(ingredient.name);
+        holder.ingredientIcon.setImageResource(R.drawable.ingredients_icon);
+        holder.addToMyIngredientsCheckBox.setChecked(ingredient.isPossessed);
 
-        holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList());
+        holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
 
         // Add listeners
         holder.addIngredientToGroceryList.setOnClickListener(
@@ -59,33 +85,26 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
                 v -> ingredientInMyIngredientsCheckBoxClicked(holder, ingredient));
     }
 
-    private void ingredientInGroceryListButtonClicked(IngredientViewHolder holder, final Ingredient ingredient) {
-        if (ingredient.isInGroceryList()) {
-            controller.removeIngredientFromGroceryList(ingredient);
+    private void ingredientInGroceryListButtonClicked(IngredientViewHolder holder, final IngredientEntity ingredient) {
+        if (ingredient.isInGroceryList) {
+            ingredient.isInGroceryList = false;
             holder.updateIngredientInGroceryListButton(false);
         } else {
-            controller.addIngredientToGroceryList(ingredient);
+            ingredient.isInGroceryList = true;
             holder.updateIngredientInGroceryListButton(true);
         }
+        this.ingredientsViewModel.updateIngredient(ingredient);
     }
 
-    private void ingredientInMyIngredientsCheckBoxClicked(IngredientViewHolder holder, final Ingredient ingredient) {
-        if (ingredient.isPossessed()) {
-            controller.removeIngredientFromMyIngredients(ingredient);
-        } else {
-            controller.addIngredientToMyIngredients(ingredient);
-        }
+    private void ingredientInMyIngredientsCheckBoxClicked(IngredientViewHolder holder,
+                                                          final IngredientEntity ingredient) {
+        ingredient.isPossessed = !ingredient.isPossessed;
+        this.ingredientsViewModel.updateIngredient(ingredient);
     }
-
-    private void updateIngredientsList() {
-        this.ingredients = controller.getIngredients(ingredientsVisibility);
-        notifyDataSetChanged();
-    }
-
 
     @Override
     public int getItemCount() {
-        return ingredients.size();
+        return ingredients == null ? 0 : ingredients.size();
     }
 
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {

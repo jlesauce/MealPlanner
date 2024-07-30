@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -12,6 +13,9 @@ import java.util.List;
 public interface IngredientDao {
     @Query("SELECT * FROM ingredients")
     LiveData<List<IngredientEntity>> getAllIngredients();
+
+    @Update
+    void updateIngredient(IngredientEntity ingredient);
 
     @Insert
     void insertIngredient(IngredientEntity ingredient);

@@ -9,12 +9,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
     private final static int NB_OF_TABS = 3;
-    private final IngredientsController controller;
 
-    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle,
-                            IngredientsController controller) {
+    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-        this.controller = controller;
     }
 
     @NonNull
@@ -22,11 +19,11 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new MyIngredientsFragment(controller);
+                return new MyIngredientsFragment();
             case 1:
-                return new ManageIngredientsFragment(controller);
+                return new ManageIngredientsFragment();
             case 2:
-                return new GroceryListFragment(controller);
+                return new GroceryListFragment();
             default:
                 throw new IllegalStateException("Unexpected value: " + position);
         }

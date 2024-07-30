@@ -18,16 +18,15 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.mealplanner.R;
+import com.google.android.material.navigation.NavigationView;
 import com.jls.mealplanner.database.ApplicationDatabase;
 import com.jls.mealplanner.model.IngredientViewModel;
 import com.jls.mealplanner.model.SharedDataHolder;
 import com.jls.mealplanner.ui.PlanningFragment;
 import com.jls.mealplanner.ui.RecipesFragment;
-import com.jls.mealplanner.ui.ingredients.IngredientsController;
 import com.jls.mealplanner.ui.ingredients.IngredientsFragment;
 import com.jls.mealplanner.utils.DatabaseHelper;
 import com.jls.mealplanner.utils.PushBulletClient;
-import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open,
-                R.string.close);
+                                                                 R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -97,13 +96,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (itemId == R.id.menu_planning) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new PlanningFragment()).commit();
+                                                                   new PlanningFragment()).commit();
         } else if (itemId == R.id.menu_ingredients) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new IngredientsFragment(new IngredientsController(sharedDataHolder))).commit();
+                                                                   new IngredientsFragment()).commit();
         } else if (itemId == R.id.menu_recipes) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new RecipesFragment()).commit();
+                                                                   new RecipesFragment()).commit();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void select_planning_fragment(Bundle savedInstanceState, NavigationView navigationView) {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new PlanningFragment()).commit();
+                                                                   new PlanningFragment()).commit();
             navigationView.setCheckedItem(R.id.menu_planning);
         }
     }

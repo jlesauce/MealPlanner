@@ -23,4 +23,10 @@ public class IngredientRepository {
             ingredientDao.insertIngredient(ingredient);
         });
     }
+
+    public void update(IngredientEntity ingredient) {
+        ApplicationDatabase.databaseWriteExecutor.execute(() -> {
+            ingredientDao.updateIngredient(ingredient);
+        });
+    }
 }
