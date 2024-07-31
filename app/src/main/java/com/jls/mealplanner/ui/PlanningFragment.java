@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.mealplanner.R;
+import com.jls.mealplanner.R;
 
 public class PlanningFragment extends Fragment {
 

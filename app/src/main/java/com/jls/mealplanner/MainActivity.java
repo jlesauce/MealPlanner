@@ -17,7 +17,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.mealplanner.R;
 import com.google.android.material.navigation.NavigationView;
 import com.jls.mealplanner.database.ApplicationDatabase;
 import com.jls.mealplanner.model.SharedDataHolder;

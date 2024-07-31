@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mealplanner"
+    namespace = "com.jls.mealplanner"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mealplanner"
+        applicationId = "com.jls.mealplanner"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -19,7 +19,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -29,7 +32,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

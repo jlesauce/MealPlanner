@@ -17,4 +17,7 @@ public class IngredientEntity {
 
     @ColumnInfo(name = "isInGroceryList")
     public boolean isInGroceryList;
+
+    @ColumnInfo(name = "icon_id")
+    public String iconId;
 }

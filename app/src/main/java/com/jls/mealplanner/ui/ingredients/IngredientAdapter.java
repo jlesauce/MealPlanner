@@ -1,6 +1,7 @@
 package com.jls.mealplanner.ui.ingredients;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mealplanner.R;
+import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
 import com.jls.mealplanner.model.IngredientIconViewModel;
@@ -98,13 +99,15 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     private void initIngredientItem(@NonNull IngredientViewHolder holder, final IngredientEntity ingredient) {
         holder.ingredientName.setText(ingredient.name);
-        holder.ingredientIcon.setImageResource(R.drawable.ingredients_icon);
         holder.addToMyIngredientsCheckBox.setChecked(ingredient.isPossessed);
 
-        IngredientIconEntity iconEntity = icons.get("egg");
+        IngredientIconEntity iconEntity = icons.get(ingredient.iconId);
         if (iconEntity != null) {
             Bitmap bitmapIcon = AssetUtils.getIconFromAssets(holder.ingredientIcon.getContext(), iconEntity.iconPath);
             holder.ingredientIcon.setImageBitmap(bitmapIcon);
+        } else {
+            Log.e(TAG, "Icon not found for ingredient: " + ingredient.name + " with iconId: " + ingredient.iconId);
+            holder.ingredientIcon.setImageResource(R.drawable.ingredients_icon);
         }
 
         holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);

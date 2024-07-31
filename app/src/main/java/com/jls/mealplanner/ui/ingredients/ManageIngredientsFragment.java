@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mealplanner.R;
+import com.jls.mealplanner.R;
 import com.jls.mealplanner.model.IngredientIconViewModel;
 import com.jls.mealplanner.model.IngredientViewModel;
 

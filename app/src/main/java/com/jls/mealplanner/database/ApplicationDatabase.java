@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {IngredientEntity.class, IngredientIconEntity.class}, version = 4, exportSchema = false)
+@Database(entities = {IngredientEntity.class, IngredientIconEntity.class}, version = 5, exportSchema = false)
 public abstract class ApplicationDatabase extends RoomDatabase {
 
     private static final String DEFAULT_DB_NAME = "default_database.db";
