@@ -1,6 +1,8 @@
-package com.jls.mealplanner.database;
+package com.jls.mealplanner.database.ingredients;
 
 import androidx.lifecycle.LiveData;
+
+import com.jls.mealplanner.database.ApplicationDatabase;
 
 import java.util.List;
 

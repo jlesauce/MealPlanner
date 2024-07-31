@@ -1,4 +1,4 @@
-package com.jls.mealplanner.database;
+package com.jls.mealplanner.database.ingredients;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

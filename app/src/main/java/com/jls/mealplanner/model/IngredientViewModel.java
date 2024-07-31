@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.jls.mealplanner.database.IngredientEntity;
-import com.jls.mealplanner.database.IngredientRepository;
+import com.jls.mealplanner.database.ingredients.IngredientEntity;
+import com.jls.mealplanner.database.ingredients.IngredientRepository;
 
 import java.util.List;
 

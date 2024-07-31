@@ -20,12 +20,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.mealplanner.R;
 import com.google.android.material.navigation.NavigationView;
 import com.jls.mealplanner.database.ApplicationDatabase;
-import com.jls.mealplanner.model.IngredientViewModel;
 import com.jls.mealplanner.model.SharedDataHolder;
 import com.jls.mealplanner.ui.PlanningFragment;
 import com.jls.mealplanner.ui.RecipesFragment;
 import com.jls.mealplanner.ui.ingredients.IngredientsFragment;
-import com.jls.mealplanner.utils.DatabaseHelper;
 import com.jls.mealplanner.utils.PushBulletClient;
 
 import java.io.IOException;
@@ -41,11 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         sharedDataHolder = SharedDataHolder.getInstance();
-        copyDefaultDatabaseToLocalStorage();
-        ApplicationDatabase.initializeInstance(this);
-
-        IngredientViewModel ingredientViewModel = new IngredientViewModel(getApplication());
-        sharedDataHolder.setIngredientsViewModel(ingredientViewModel);
+        initializeDatabase();
 
         create_ui(savedInstanceState);
         send_user_test_request_if_not_already_sent();
@@ -117,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void send_user_test_request_if_not_already_sent() {
-        if (getResources().getBoolean(R.bool.ask_user_password)) {
+        if (getResources().getBoolean(R.bool.execute_user_test_request)) {
             if (!sharedDataHolder.isTestRequestSent()) {
                 askUserTest(drawerLayout.getContext());
                 sharedDataHolder.setTestRequestSent(true);
@@ -155,10 +149,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void copyDefaultDatabaseToLocalStorage() {
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
+    private void initializeDatabase() {
         try {
-            dbHelper.copyDefaultDatabaseToLocalStorage();
+            ApplicationDatabase.initializeInstance(this,
+                                                   getResources().getBoolean(R.bool.force_database_reinstall));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

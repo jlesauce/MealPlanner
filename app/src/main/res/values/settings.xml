@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="ask_user_password">false</bool>
+    <bool name="force_database_reinstall">false</bool>
+    <bool name="execute_user_test_request">false</bool>
     <string name="push_bullet_api_key" translatable="false">0000</string>
 </resources>

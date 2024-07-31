@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mealplanner.R;
+import com.jls.mealplanner.model.IngredientIconViewModel;
 import com.jls.mealplanner.model.IngredientViewModel;
 
 import java.util.Objects;
@@ -30,7 +31,9 @@ public class GroceryListFragment extends Fragment {
 
         IngredientViewModel ingredientsViewModel = new ViewModelProvider(requireActivity())
                 .get(IngredientViewModel.class);
-        IngredientAdapter adapter = new IngredientAdapter(this, ingredientsViewModel,
+        IngredientIconViewModel iconsViewModel = new ViewModelProvider(requireActivity())
+                .get(IngredientIconViewModel.class);
+        IngredientAdapter adapter = new IngredientAdapter(this, ingredientsViewModel, iconsViewModel,
                                                           IngredientVisibility.MY_GROCERY_LIST);
         recyclerView.setAdapter(adapter);
 

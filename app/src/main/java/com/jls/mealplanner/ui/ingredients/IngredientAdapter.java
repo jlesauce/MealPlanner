@@ -1,5 +1,6 @@
 package com.jls.mealplanner.ui.ingredients;
 
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,47 +16,71 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mealplanner.R;
-import com.jls.mealplanner.database.IngredientEntity;
+import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
+import com.jls.mealplanner.database.ingredients.IngredientEntity;
+import com.jls.mealplanner.model.IngredientIconViewModel;
 import com.jls.mealplanner.model.IngredientViewModel;
+import com.jls.mealplanner.utils.AssetUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>
-        implements Observer<List<IngredientEntity>> {
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
 
     private final IngredientViewModel ingredientsViewModel;
+    private final IngredientIconViewModel iconsViewModel;
     private final IngredientVisibility ingredientsVisibility;
     private final ArrayList<IngredientEntity> ingredients;
+    private final HashMap<String, IngredientIconEntity> icons;
 
-    public IngredientAdapter(Fragment fragment, IngredientViewModel viewModel,
+    private final String TAG = IngredientAdapter.class.getSimpleName();
+
+    public IngredientAdapter(Fragment fragment, IngredientViewModel viewModel, IngredientIconViewModel iconsViewModel,
                              final IngredientVisibility ingredientVisibility) {
         this.ingredientsViewModel = viewModel;
+        this.iconsViewModel = iconsViewModel;
         this.ingredientsVisibility = ingredientVisibility;
-        this.ingredientsViewModel.getAllIngredients().observe(fragment, this);
         this.ingredients = new ArrayList<>();
-    }
+        this.icons = new HashMap<>();
 
-    @Override
-    public void onChanged(@Nullable final List<IngredientEntity> allIngredients) {
-        IngredientVisibility v = ingredientsVisibility;
 
-        if (allIngredients == null) {
-            return;
-        }
+        this.ingredientsViewModel.getAllIngredients().observe(fragment, new Observer<List<IngredientEntity>>() {
+            @Override
+            public void onChanged(@Nullable final List<IngredientEntity> allIngredients) {
+                IngredientVisibility v = ingredientsVisibility;
 
-        ingredients.clear();
-        for (IngredientEntity ingredient : allIngredients) {
-            if (v == IngredientVisibility.MY_STOCK && ingredient.isPossessed) {
-                ingredients.add(ingredient);
-            } else if (v == IngredientVisibility.MY_GROCERY_LIST && ingredient.isInGroceryList) {
-                ingredients.add(ingredient);
-            } else if (v == IngredientVisibility.ALL_INGREDIENTS) {
-                ingredients.add(ingredient);
+                if (allIngredients == null) {
+                    return;
+                }
+
+                ingredients.clear();
+                for (IngredientEntity ingredient : allIngredients) {
+                    if (v == IngredientVisibility.MY_STOCK && ingredient.isPossessed) {
+                        ingredients.add(ingredient);
+                    } else if (v == IngredientVisibility.MY_GROCERY_LIST && ingredient.isInGroceryList) {
+                        ingredients.add(ingredient);
+                    } else if (v == IngredientVisibility.ALL_INGREDIENTS) {
+                        ingredients.add(ingredient);
+                    }
+                }
+
+                notifyDataSetChanged();
             }
-        }
+        });
 
-        notifyDataSetChanged();
+        this.iconsViewModel.getAllIngredientIcons().observe(fragment, allIcons -> {
+            if (allIcons == null) {
+                return;
+            }
+
+            icons.clear();
+            for (IngredientIconEntity icon : allIcons) {
+                icons.put(icon.shortName, icon);
+            }
+
+            notifyDataSetChanged();
+        });
     }
 
     @NonNull
@@ -75,6 +100,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         holder.ingredientName.setText(ingredient.name);
         holder.ingredientIcon.setImageResource(R.drawable.ingredients_icon);
         holder.addToMyIngredientsCheckBox.setChecked(ingredient.isPossessed);
+
+        IngredientIconEntity iconEntity = icons.get("egg");
+        if (iconEntity != null) {
+            Bitmap bitmapIcon = AssetUtils.getIconFromAssets(holder.ingredientIcon.getContext(), iconEntity.iconPath);
+            holder.ingredientIcon.setImageBitmap(bitmapIcon);
+        }
 
         holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
 
