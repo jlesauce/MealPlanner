@@ -3,7 +3,9 @@ package com.jls.mealplanner;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -13,6 +15,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -28,6 +31,8 @@ import com.jls.mealplanner.utils.PushBulletClient;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final String TAG = "MainActivity";
 
     private DrawerLayout drawerLayout = null;
     private SharedDataHolder sharedDataHolder;
@@ -45,11 +50,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void create_ui(Bundle savedInstanceState) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
+        Log.d(TAG, "Creating UI");
+
+        Toolbar toolbar = createToolbar();
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.navigation_view);
@@ -63,6 +66,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         addHandleBackPressedCallback();
 
         select_planning_fragment(savedInstanceState, navigationView);
+    }
+
+    private Toolbar createToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        return toolbar;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        if (searchView == null) {
+            Log.e(TAG, "Search view is null");
+            return false;
+        }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i(TAG, "Searching text: " + newText);
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.about) {
+            Log.d(TAG, "About clicked from top bar menu");
+            return true;
+        } else if (id == R.id.settings) {
+            Log.d(TAG, "Settings clicked from top bar menu");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void addHandleBackPressedCallback() {
@@ -96,6 +151,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (itemId == R.id.menu_recipes) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                                                    new RecipesFragment()).commit();
+        } else if (itemId == R.id.menu_settings) {
+            Log.d(TAG, "Settings clicked from navigation menu");
+        } else if (itemId == R.id.menu_about) {
+            Log.d(TAG, "About clicked from navigation menu");
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

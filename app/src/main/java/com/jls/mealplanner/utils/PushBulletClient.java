@@ -3,7 +3,7 @@ package com.jls.mealplanner.utils;
 import android.util.Log;
 import android.util.Pair;
 
-import com.example.mealplanner.R;
+import com.jls.mealplanner.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
