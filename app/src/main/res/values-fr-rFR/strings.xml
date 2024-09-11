@@ -6,6 +6,7 @@
     <string name="planning">Planning</string>
     <string name="ingredients">Ingrédients</string>
     <string name="ingredient">Ingrédient</string>
+    <string name="recipe">Recette</string>
     <string name="recipes">Recettes</string>
     <string name="settings">Paramètres</string>
     <string name="about">A Propos</string>
@@ -18,4 +19,5 @@
     <string name="search">Rechercher</string>
     <string name="more_options">Plus d\'options</string>
     <string name="add_to_grocery_list">Ajouter à la liste</string>
+    <string name="add_to_favorites">Ajouter aux favoris</string>
 </resources>

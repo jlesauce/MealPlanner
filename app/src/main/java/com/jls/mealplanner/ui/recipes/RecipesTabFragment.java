@@ -24,5 +24,7 @@ public class RecipesTabFragment extends TabFragment {
      * @param recyclerView the RecyclerView of the fragment.
      */
     protected void onCustomCreateView(RecyclerView recyclerView) {
+        RecipeAdapter adapter = new RecipeAdapter(this, this.listType);
+        recyclerView.setAdapter(adapter);
     }
 }

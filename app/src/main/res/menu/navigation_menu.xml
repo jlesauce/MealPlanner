@@ -14,7 +14,7 @@
             android:title="@string/ingredients" />
         <item
             android:id="@+id/menu_recipes"
-            android:icon="@drawable/recipes_icon"
+            android:icon="@drawable/recipe_icon"
             android:title="@string/recipes" />
     </group>
 

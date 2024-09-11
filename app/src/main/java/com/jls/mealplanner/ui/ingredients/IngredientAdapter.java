@@ -11,9 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
@@ -25,12 +23,11 @@ import com.jls.mealplanner.utils.AssetUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
 
     private final IngredientViewModel ingredientsViewModel;
-    private final IngredientListType ingredientsVisibility;
+    private final IngredientListType ingredientsListType;
     private final ArrayList<IngredientEntity> ingredients;
     private final HashMap<String, IngredientIconEntity> icons;
 
@@ -39,33 +36,30 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     public IngredientAdapter(Fragment fragment, IngredientViewModel viewModel, IngredientIconViewModel iconsViewModel,
                              final IngredientListType ingredientListType) {
         this.ingredientsViewModel = viewModel;
-        this.ingredientsVisibility = ingredientListType;
+        this.ingredientsListType = ingredientListType;
         this.ingredients = new ArrayList<>();
         this.icons = new HashMap<>();
 
 
-        this.ingredientsViewModel.getAllIngredients().observe(fragment, new Observer<List<IngredientEntity>>() {
-            @Override
-            public void onChanged(@Nullable final List<IngredientEntity> allIngredients) {
-                IngredientListType v = ingredientsVisibility;
+        this.ingredientsViewModel.getAllIngredients().observe(fragment, allIngredients -> {
+            IngredientListType v = ingredientsListType;
 
-                if (allIngredients == null) {
-                    return;
-                }
-
-                ingredients.clear();
-                for (IngredientEntity ingredient : allIngredients) {
-                    if (v == IngredientListType.MY_STOCK && ingredient.isPossessed) {
-                        ingredients.add(ingredient);
-                    } else if (v == IngredientListType.MY_GROCERY_LIST && ingredient.isInGroceryList) {
-                        ingredients.add(ingredient);
-                    } else if (v == IngredientListType.ALL_INGREDIENTS) {
-                        ingredients.add(ingredient);
-                    }
-                }
-
-                notifyDataSetChanged();
+            if (allIngredients == null) {
+                return;
             }
+
+            ingredients.clear();
+            for (IngredientEntity ingredient : allIngredients) {
+                if (v == IngredientListType.MY_STOCK && ingredient.isPossessed) {
+                    ingredients.add(ingredient);
+                } else if (v == IngredientListType.MY_GROCERY_LIST && ingredient.isInGroceryList) {
+                    ingredients.add(ingredient);
+                } else if (v == IngredientListType.ALL_INGREDIENTS) {
+                    ingredients.add(ingredient);
+                }
+            }
+
+            notifyDataSetChanged();
         });
 
         iconsViewModel.getAllIngredientIcons().observe(fragment, allIcons -> {
