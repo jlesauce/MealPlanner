@@ -1,42 +1,44 @@
-package com.jls.mealplanner.ui.ingredients;
+package com.jls.mealplanner.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
-import com.jls.mealplanner.model.IngredientIconViewModel;
-import com.jls.mealplanner.model.IngredientViewModel;
 
 import java.util.Objects;
 
 
-public class ManageIngredientsFragment extends Fragment {
+public abstract class TabFragment extends Fragment {
+
+    private final int tabLayout;
+    private final int recyclerViewId;
+
+    public TabFragment(@LayoutRes int tabLayout, @IdRes int recyclerViewId) {
+        this.tabLayout = tabLayout;
+        this.recyclerViewId = recyclerViewId;
+    }
+
+    abstract protected void onCustomCreateView(RecyclerView recyclerView);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab_all_ingredients, container, false);
+        View view = inflater.inflate(this.tabLayout, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.allIngredientsRecyclerView);
+        RecyclerView recyclerView = view.findViewById(this.recyclerViewId);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         addItemDivider(recyclerView);
-
-        IngredientViewModel ingredientsViewModel = new ViewModelProvider(requireActivity()).get(
-                IngredientViewModel.class);
-        IngredientIconViewModel iconsViewModel = new ViewModelProvider(requireActivity())
-                .get(IngredientIconViewModel.class);
-        IngredientAdapter adapter = new IngredientAdapter(this, ingredientsViewModel,
-                                                          iconsViewModel, IngredientVisibility.ALL_INGREDIENTS);
-        recyclerView.setAdapter(adapter);
+        onCustomCreateView(recyclerView);
 
         return view;
     }
@@ -46,7 +48,7 @@ public class ManageIngredientsFragment extends Fragment {
                                                                                 DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(
                 Objects.requireNonNull(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ingredients_list_divider)));
+                        ContextCompat.getDrawable(requireContext(), R.drawable.item_list_divider)));
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 }

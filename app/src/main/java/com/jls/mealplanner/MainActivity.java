@@ -23,16 +23,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.jls.mealplanner.database.ApplicationDatabase;
 import com.jls.mealplanner.model.SharedDataHolder;
+import com.jls.mealplanner.ui.IngredientsFragment;
 import com.jls.mealplanner.ui.PlanningFragment;
 import com.jls.mealplanner.ui.RecipesFragment;
-import com.jls.mealplanner.ui.ingredients.IngredientsFragment;
 import com.jls.mealplanner.utils.PushBulletClient;
 
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final String TAG = "MainActivity";
+    private final String TAG = MainActivity.class.getSimpleName();
 
     private DrawerLayout drawerLayout = null;
     private SharedDataHolder sharedDataHolder;

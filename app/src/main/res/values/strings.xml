@@ -11,8 +11,8 @@
     <string name="my_ingredients">My ingredients</string>
     <string name="manage_ingredients">Manage</string>
     <string name="grocery_list">Grocery list</string>
-    <string name="meals">Meals</string>
-    <string name="all_recipes">My Recipes</string>
+    <string name="my_recipes">My Meals</string>
+    <string name="all_recipes">All Recipes</string>
     <string name="favorites">Favorites</string>
     <string name="search">Search</string>
     <string name="more_options">More Options</string>

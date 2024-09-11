@@ -12,7 +12,7 @@
     <string name="my_ingredients">Mon Frigo</string>
     <string name="manage_ingredients">Gérer</string>
     <string name="grocery_list">Liste de courses</string>
-    <string name="meals">Mes Repas</string>
+    <string name="my_recipes">Mes Repas</string>
     <string name="all_recipes">Recettes</string>
     <string name="favorites">Favoris</string>
     <string name="search">Rechercher</string>

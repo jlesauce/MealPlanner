@@ -1,4 +1,4 @@
-package com.jls.mealplanner.ui.ingredients;
+package com.jls.mealplanner.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jls.mealplanner.R;
+import com.jls.mealplanner.ui.ingredients.IngredientsViewPagerAdapter;
 
 public class IngredientsFragment extends Fragment {
 
@@ -26,7 +27,8 @@ public class IngredientsFragment extends Fragment {
 
         TabLayout tabLayout = view.findViewById(R.id.ingredientsTabLayout);
         ViewPager2 viewPager = view.findViewById(R.id.ingredientsViewPager);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), getLifecycle());
+        IngredientsViewPagerAdapter viewPagerAdapter = new IngredientsViewPagerAdapter(getChildFragmentManager(),
+                                                                                       getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(tabTitles[position])).attach();

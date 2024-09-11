@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.jls.mealplanner.ui.ingredients.GroceryListFragment">
+    tools:context="com.jls.mealplanner.ui.recipes.RecipesTabFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/groceryListRecyclerView"
+        android:id="@+id/recipesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

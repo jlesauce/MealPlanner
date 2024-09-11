@@ -30,18 +30,16 @@ import java.util.List;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
 
     private final IngredientViewModel ingredientsViewModel;
-    private final IngredientIconViewModel iconsViewModel;
-    private final IngredientVisibility ingredientsVisibility;
+    private final IngredientListType ingredientsVisibility;
     private final ArrayList<IngredientEntity> ingredients;
     private final HashMap<String, IngredientIconEntity> icons;
 
     private final String TAG = IngredientAdapter.class.getSimpleName();
 
     public IngredientAdapter(Fragment fragment, IngredientViewModel viewModel, IngredientIconViewModel iconsViewModel,
-                             final IngredientVisibility ingredientVisibility) {
+                             final IngredientListType ingredientListType) {
         this.ingredientsViewModel = viewModel;
-        this.iconsViewModel = iconsViewModel;
-        this.ingredientsVisibility = ingredientVisibility;
+        this.ingredientsVisibility = ingredientListType;
         this.ingredients = new ArrayList<>();
         this.icons = new HashMap<>();
 
@@ -49,7 +47,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         this.ingredientsViewModel.getAllIngredients().observe(fragment, new Observer<List<IngredientEntity>>() {
             @Override
             public void onChanged(@Nullable final List<IngredientEntity> allIngredients) {
-                IngredientVisibility v = ingredientsVisibility;
+                IngredientListType v = ingredientsVisibility;
 
                 if (allIngredients == null) {
                     return;
@@ -57,11 +55,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
                 ingredients.clear();
                 for (IngredientEntity ingredient : allIngredients) {
-                    if (v == IngredientVisibility.MY_STOCK && ingredient.isPossessed) {
+                    if (v == IngredientListType.MY_STOCK && ingredient.isPossessed) {
                         ingredients.add(ingredient);
-                    } else if (v == IngredientVisibility.MY_GROCERY_LIST && ingredient.isInGroceryList) {
+                    } else if (v == IngredientListType.MY_GROCERY_LIST && ingredient.isInGroceryList) {
                         ingredients.add(ingredient);
-                    } else if (v == IngredientVisibility.ALL_INGREDIENTS) {
+                    } else if (v == IngredientListType.ALL_INGREDIENTS) {
                         ingredients.add(ingredient);
                     }
                 }
@@ -70,7 +68,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
             }
         });
 
-        this.iconsViewModel.getAllIngredientIcons().observe(fragment, allIcons -> {
+        iconsViewModel.getAllIngredientIcons().observe(fragment, allIcons -> {
             if (allIcons == null) {
                 return;
             }
