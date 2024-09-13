@@ -1,4 +1,3 @@
-// RecipeDetailsFragment.java
 package com.jls.mealplanner.ui.recipes;
 
 import android.os.Bundle;
@@ -12,24 +11,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class RecipeDetailsFragment extends Fragment {
-
-    private RecipeEntity recipe;
 
     public static RecipeDetailsFragment newInstance(RecipeEntity recipe) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
         args.putString("name", recipe.name);
-        args.putBoolean("isInFavorites", recipe.isInFavorites);
-        args.putString("iconId", recipe.iconId);
+        args.putBoolean("isInFavorite", recipe.isInFavorite);
         args.putString("description", recipe.description);
-        args.putStringArrayList("steps", new ArrayList<>(recipe.steps));
-        args.putStringArrayList("ingredients", new ArrayList<>(recipe.ingredients));
+        args.putString("stepsAsJson", recipe.stepsAsJson);
+        args.putString("ingredientsAsJson", recipe.ingredientsAsJson);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,32 +39,39 @@ public class RecipeDetailsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_details, container, false);
 
-        if (getArguments() != null) {
-            recipe = new RecipeEntity(
-                    getArguments().getString("name"),
-                    getArguments().getBoolean("isInFavorites"),
-                    getArguments().getString("iconId"),
-                    getArguments().getString("description"),
-                    getArguments().getStringArrayList("steps"),
-                    getArguments().getStringArrayList("ingredients")
-            );
+        if (getArguments() == null) {
+            return view;
         }
+
+        String name = getArguments().getString("name");
+        boolean isInFavorite = getArguments().getBoolean("isInFavorite");
+        String description = getArguments().getString("description");
+        String stepsAsJson = getArguments().getString("stepsAsJson");
+        String ingredientsAsJson = getArguments().getString("ingredientsAsJson");
 
         TextView recipeName = view.findViewById(R.id.recipeName);
         TextView recipeDescription = view.findViewById(R.id.recipeDescription);
         LinearLayout stepsContainer = view.findViewById(R.id.stepsContainer);
         LinearLayout ingredientsContainer = view.findViewById(R.id.ingredientsContainer);
 
-        recipeName.setText(recipe.name);
-        recipeDescription.setText(recipe.description);
+        recipeName.setText(name);
+        recipeDescription.setText(description);
 
-        for (int i = 0; i < recipe.steps.size(); i++) {
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<String>>() {
+        }.getType();
+
+        // Convert stepsAsJson to a list and iterate over it
+        List<String> steps = gson.fromJson(stepsAsJson, listType);
+        for (int i = 0; i < steps.size(); i++) {
             TextView stepTextView = new TextView(getContext());
-            stepTextView.setText((i + 1) + ". " + recipe.steps.get(i));
+            stepTextView.setText((i + 1) + ". " + steps.get(i));
             stepsContainer.addView(stepTextView);
         }
 
-        for (String ingredient : recipe.ingredients) {
+        // Convert ingredientsAsJson to a list and iterate over it
+        List<String> ingredients = gson.fromJson(ingredientsAsJson, listType);
+        for (String ingredient : ingredients) {
             TextView ingredientTextView = new TextView(getContext());
             ingredientTextView.setText(ingredient);
             ingredientsContainer.addView(ingredientTextView);

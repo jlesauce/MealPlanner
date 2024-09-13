@@ -14,39 +14,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
+import com.jls.mealplanner.model.RecipeViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private static final String TAG = RecipeAdapter.class.getSimpleName();
 
-    private final RecipeListType recipeListType;
-    private final ArrayList<RecipeEntity> recipes;
     private final Fragment topFragment;
+    private final ArrayList<RecipeEntity> recipes;
 
-    public RecipeAdapter(@NonNull Fragment topFragment, final RecipeListType recipeListType) {
+    public RecipeAdapter(@NonNull Fragment topFragment, @NonNull Fragment fragment, final RecipeListType listType,
+                         RecipeViewModel recipesViewModel) {
         this.topFragment = topFragment;
-        this.recipeListType = recipeListType;
         this.recipes = new ArrayList<>();
 
-        // FIXME To be removed
-        this.recipes.add(new RecipeEntity(
-                "Recipe 1", false, "icon_1", "Description 1",
-                Arrays.asList("Open the fridge", "Cut the cucumber", "Mix ingredients"),
-                Arrays.asList("Cucumber", "Tomato", "Lettuce")
-        ));
-        this.recipes.add(new RecipeEntity(
-                "Recipe 2", true, "icon_2", "Description 2",
-                Arrays.asList("Boil water", "Add pasta", "Cook for 10 minutes"),
-                Arrays.asList("Pasta", "Salt", "Olive oil")
-        ));
-        this.recipes.add(new RecipeEntity(
-                "Recipe 3", false, "icon_3", "Description 3",
-                Arrays.asList("Preheat oven to 180°C", "Mix flour and sugar", "Bake for 30 minutes"),
-                Arrays.asList("Flour", "Sugar", "Eggs")
-        ));
+        recipesViewModel.getAllRecipes().observe(fragment, allRecipes -> {
+            if (allRecipes == null) {
+                return;
+            }
+            recipes.clear();
+            for (RecipeEntity recipe : allRecipes) {
+                if (listType == RecipeListType.MY_RECIPES) {
+                    // FIXME To be implemented
+                    break;
+                } else if (listType == RecipeListType.ALL_RECIPES) {
+                    recipes.add(recipe);
+                } else if (listType == RecipeListType.FAVORITE_RECIPES && recipe.isInFavorite) {
+                    recipes.add(recipe);
+                }
+            }
+            notifyDataSetChanged();
+        });
     }
 
     @NonNull
@@ -74,16 +74,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private void initRecipeItem(@NonNull RecipeViewHolder holder, final RecipeEntity recipe) {
         holder.recipeName.setText(recipe.name);
         holder.recipeIcon.setImageResource(R.drawable.recipe_icon);
-        holder.updateRecipeInFavoritesButton(recipe.isInFavorites);
+        holder.updateRecipeInFavoritesButton(recipe.isInFavorite);
 
-        // Add listeners
         holder.addRecipeToFavorites.setOnClickListener(
                 v -> recipeToFavoritesButtonClicked(holder, recipe));
     }
 
     private void recipeToFavoritesButtonClicked(RecipeViewHolder holder, final RecipeEntity recipe) {
-        recipe.isInFavorites = !recipe.isInFavorites;
-        holder.updateRecipeInFavoritesButton(recipe.isInFavorites);
+        recipe.isInFavorite = !recipe.isInFavorite;
+        holder.updateRecipeInFavoritesButton(recipe.isInFavorite);
     }
 
     @Override

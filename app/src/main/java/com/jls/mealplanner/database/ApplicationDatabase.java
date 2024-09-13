@@ -11,6 +11,8 @@ import com.jls.mealplanner.database.ingredienticons.IngredientIconDao;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
 import com.jls.mealplanner.database.ingredients.IngredientDao;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
+import com.jls.mealplanner.database.recipes.RecipeDao;
+import com.jls.mealplanner.database.recipes.RecipeEntity;
 import com.jls.mealplanner.utils.AssetUtils;
 
 import java.io.File;
@@ -24,7 +26,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {IngredientEntity.class, IngredientIconEntity.class}, version = 5, exportSchema = false)
+@Database(entities = {IngredientEntity.class, IngredientIconEntity.class, RecipeEntity.class}, version = 6, exportSchema = false)
 public abstract class ApplicationDatabase extends RoomDatabase {
 
     private static final String DEFAULT_DB_NAME = "default_database.db";
@@ -52,6 +54,7 @@ public abstract class ApplicationDatabase extends RoomDatabase {
             ApplicationDatabase.INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                                                 ApplicationDatabase.class, DATABASE_NAME)
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration() // FIXME Remove this line when app deployed
                     .build();
         } else {
             throw new RuntimeException(ApplicationDatabase.class.getSimpleName() +
@@ -70,6 +73,8 @@ public abstract class ApplicationDatabase extends RoomDatabase {
     public abstract IngredientDao ingredientDao();
 
     public abstract IngredientIconDao ingredientIconDao();
+
+    public abstract RecipeDao recipeDao();
 
     public static void copyDefaultDatabaseToApplicationStorage(final Context context) throws IOException {
         File databaseFile = context.getDatabasePath(DATABASE_NAME);

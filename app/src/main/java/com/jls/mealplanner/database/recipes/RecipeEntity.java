@@ -1,22 +1,30 @@
 package com.jls.mealplanner.database.recipes;
 
-import java.util.List;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "recipes")
 public class RecipeEntity {
-    public String name;
-    public boolean isInFavorites;
-    public String iconId;
-    public String description;
-    public List<String> steps;
-    public List<String> ingredients;
 
-    public RecipeEntity(String name, boolean isInFavorites, String iconId, String description, List<String> steps,
-                        List<String> ingredients) {
-        this.name = name;
-        this.isInFavorites = isInFavorites;
-        this.iconId = iconId;
-        this.description = description;
-        this.steps = steps;
-        this.ingredients = ingredients;
-    }
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
+    @ColumnInfo(name = "name")
+    public String name;
+
+    @ColumnInfo(name = "is_in_favorite")
+    public boolean isInFavorite;
+
+    @ColumnInfo(name = "icon_id")
+    public String iconId;
+
+    @ColumnInfo(name = "description")
+    public String description;
+
+    @ColumnInfo(name = "steps_as_json")
+    public String stepsAsJson;
+
+    @ColumnInfo(name = "ingredients_as_json")
+    public String ingredientsAsJson;
 }

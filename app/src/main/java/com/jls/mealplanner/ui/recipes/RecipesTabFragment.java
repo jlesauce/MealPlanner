@@ -2,9 +2,11 @@ package com.jls.mealplanner.ui.recipes;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
+import com.jls.mealplanner.model.RecipeViewModel;
 import com.jls.mealplanner.ui.TabFragment;
 
 
@@ -28,7 +30,10 @@ public class RecipesTabFragment extends TabFragment {
      * @param recyclerView the RecyclerView of the fragment.
      */
     protected void onCustomCreateView(RecyclerView recyclerView) {
-        RecipeAdapter adapter = new RecipeAdapter(topFragment, this.listType);
+        RecipeViewModel recipesViewModel = new ViewModelProvider(requireActivity())
+                .get(RecipeViewModel.class);
+
+        RecipeAdapter adapter = new RecipeAdapter(topFragment, this, this.listType, recipesViewModel);
         recyclerView.setAdapter(adapter);
     }
 }
