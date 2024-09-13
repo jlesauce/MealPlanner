@@ -27,7 +27,8 @@ public class RecipesFragment extends Fragment {
 
         TabLayout tabLayout = view.findViewById(R.id.recipesTabLayout);
         ViewPager2 viewPager = view.findViewById(R.id.recipesViewPager);
-        RecipesViewPagerAdapter viewPagerAdapter = new RecipesViewPagerAdapter(getChildFragmentManager(),
+        RecipesViewPagerAdapter viewPagerAdapter = new RecipesViewPagerAdapter(this,
+                                                                               getChildFragmentManager(),
                                                                                getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
 

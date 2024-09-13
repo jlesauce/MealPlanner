@@ -16,6 +16,7 @@ import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -23,13 +24,29 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     private final RecipeListType recipeListType;
     private final ArrayList<RecipeEntity> recipes;
+    private final Fragment topFragment;
 
-    public RecipeAdapter(Fragment fragment, final RecipeListType recipeListType) {
+    public RecipeAdapter(@NonNull Fragment topFragment, final RecipeListType recipeListType) {
+        this.topFragment = topFragment;
         this.recipeListType = recipeListType;
         this.recipes = new ArrayList<>();
 
         // FIXME To be removed
-        this.recipes.add(new RecipeEntity("Recipe 1", false, ""));
+        this.recipes.add(new RecipeEntity(
+                "Recipe 1", false, "icon_1", "Description 1",
+                Arrays.asList("Open the fridge", "Cut the cucumber", "Mix ingredients"),
+                Arrays.asList("Cucumber", "Tomato", "Lettuce")
+        ));
+        this.recipes.add(new RecipeEntity(
+                "Recipe 2", true, "icon_2", "Description 2",
+                Arrays.asList("Boil water", "Add pasta", "Cook for 10 minutes"),
+                Arrays.asList("Pasta", "Salt", "Olive oil")
+        ));
+        this.recipes.add(new RecipeEntity(
+                "Recipe 3", false, "icon_3", "Description 3",
+                Arrays.asList("Preheat oven to 180°C", "Mix flour and sugar", "Bake for 30 minutes"),
+                Arrays.asList("Flour", "Sugar", "Eggs")
+        ));
     }
 
     @NonNull
@@ -46,8 +63,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         holder.itemView.setOnClickListener(v -> {
             Log.d(TAG, "Recipe clicked: " + currentRecipe.name);
+            RecipeDetailsFragment fragment = RecipeDetailsFragment.newInstance(currentRecipe);
+            topFragment.getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
-
     }
 
     private void initRecipeItem(@NonNull RecipeViewHolder holder, final RecipeEntity recipe) {
