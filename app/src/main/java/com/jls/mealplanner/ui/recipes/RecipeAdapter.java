@@ -65,7 +65,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         holder.itemView.setOnClickListener(v -> {
             Log.d(TAG, "Recipe clicked: " + currentRecipe.name);
-            RecipeDetailsFragment fragment = RecipeDetailsFragment.newInstance(currentRecipe);
+            RecipeDetailsFragment fragment = new RecipeDetailsFragment(recipesViewModel, currentRecipe);
             topFragment.getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .addToBackStack(null)
