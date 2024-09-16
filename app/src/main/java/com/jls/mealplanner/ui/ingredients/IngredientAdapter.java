@@ -5,10 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,7 +20,7 @@ import com.jls.mealplanner.utils.AssetUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
 
     private final IngredientViewModel ingredientsViewModel;
     private final IngredientListType ingredientsListType;
@@ -104,7 +100,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
         holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
 
-        // Add listeners
         holder.addIngredientToGroceryList.setOnClickListener(
                 v -> ingredientInGroceryListButtonClicked(holder, ingredient));
         holder.addToMyIngredientsCheckBox.setOnClickListener(
@@ -126,25 +121,5 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     @Override
     public int getItemCount() {
         return ingredients == null ? 0 : ingredients.size();
-    }
-
-    public static class IngredientViewHolder extends RecyclerView.ViewHolder {
-        ImageView ingredientIcon;
-        TextView ingredientName;
-        ImageButton addIngredientToGroceryList;
-        CheckBox addToMyIngredientsCheckBox;
-
-        public IngredientViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ingredientIcon = itemView.findViewById(R.id.ingredientIcon);
-            ingredientName = itemView.findViewById(R.id.ingredientName);
-            addIngredientToGroceryList = itemView.findViewById(R.id.addIngredientToGroceryList);
-            addToMyIngredientsCheckBox = itemView.findViewById(R.id.addToMyIngredientsCheckBox);
-        }
-
-        public void updateIngredientInGroceryListButton(boolean isInGroceryList) {
-            addIngredientToGroceryList.setImageResource(
-                    isInGroceryList ? R.drawable.grocery_list_icon_enabled : R.drawable.grocery_list_icon_disabled);
-        }
     }
 }

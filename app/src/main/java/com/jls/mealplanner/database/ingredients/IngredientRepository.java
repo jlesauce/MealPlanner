@@ -1,6 +1,7 @@
 package com.jls.mealplanner.database.ingredients;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.jls.mealplanner.database.ApplicationDatabase;
 
@@ -30,5 +31,14 @@ public class IngredientRepository {
         ApplicationDatabase.databaseWriteExecutor.execute(() -> {
             ingredientDao.updateIngredient(ingredient);
         });
+    }
+
+    public MutableLiveData<IngredientEntity> findByName(String ingredientName) {
+        MutableLiveData<IngredientEntity> ingredientLiveData = new MutableLiveData<>();
+        ApplicationDatabase.databaseWriteExecutor.execute(() -> {
+            IngredientEntity ingredient = ingredientDao.findByName(ingredientName);
+            ingredientLiveData.postValue(ingredient);
+        });
+        return ingredientLiveData;
     }
 }

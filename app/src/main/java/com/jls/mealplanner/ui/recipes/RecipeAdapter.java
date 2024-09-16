@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
+import com.jls.mealplanner.model.IngredientIconViewModel;
+import com.jls.mealplanner.model.IngredientViewModel;
 import com.jls.mealplanner.model.RecipeViewModel;
 
 import java.util.ArrayList;
@@ -25,12 +27,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private final Fragment topFragment;
     private final ArrayList<RecipeEntity> recipes;
     private final RecipeViewModel recipesViewModel;
+    private final IngredientIconViewModel iconsViewModel;
+    private final IngredientViewModel ingredientsViewModel;
 
     public RecipeAdapter(@NonNull Fragment topFragment, @NonNull Fragment fragment, final RecipeListType listType,
-                         RecipeViewModel recipesViewModel) {
+                         RecipeViewModel recipesViewModel, IngredientViewModel ingredientViewModel,
+                         IngredientIconViewModel iconsViewModel) {
         this.topFragment = topFragment;
         this.recipes = new ArrayList<>();
         this.recipesViewModel = recipesViewModel;
+        this.ingredientsViewModel = ingredientViewModel;
+        this.iconsViewModel = iconsViewModel;
 
         recipesViewModel.getAllRecipes().observe(fragment, allRecipes -> {
             if (allRecipes == null) {
@@ -65,7 +72,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         holder.itemView.setOnClickListener(v -> {
             Log.d(TAG, "Recipe clicked: " + currentRecipe.name);
-            RecipeDetailsFragment fragment = new RecipeDetailsFragment(recipesViewModel, currentRecipe);
+            RecipeDetailsFragment fragment = new RecipeDetailsFragment(recipesViewModel, ingredientsViewModel,
+                                                                       iconsViewModel, currentRecipe);
             topFragment.getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .addToBackStack(null)

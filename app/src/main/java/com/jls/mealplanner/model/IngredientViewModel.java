@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
 import com.jls.mealplanner.database.ingredients.IngredientRepository;
@@ -32,5 +33,9 @@ public class IngredientViewModel extends AndroidViewModel {
 
     public void insert(IngredientEntity ingredient) {
         repository.insert(ingredient);
+    }
+
+    public MutableLiveData<IngredientEntity> searchIngredient(String ingredientName) {
+        return repository.findByName(ingredientName);
     }
 }
