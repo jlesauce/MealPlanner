@@ -24,11 +24,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     private final Fragment topFragment;
     private final ArrayList<RecipeEntity> recipes;
+    private final RecipeViewModel recipesViewModel;
 
     public RecipeAdapter(@NonNull Fragment topFragment, @NonNull Fragment fragment, final RecipeListType listType,
                          RecipeViewModel recipesViewModel) {
         this.topFragment = topFragment;
         this.recipes = new ArrayList<>();
+        this.recipesViewModel = recipesViewModel;
 
         recipesViewModel.getAllRecipes().observe(fragment, allRecipes -> {
             if (allRecipes == null) {
@@ -83,6 +85,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private void recipeToFavoritesButtonClicked(RecipeViewHolder holder, final RecipeEntity recipe) {
         recipe.isInFavorite = !recipe.isInFavorite;
         holder.updateRecipeInFavoritesButton(recipe.isInFavorite);
+        this.recipesViewModel.updateRecipe(recipe);
     }
 
     @Override

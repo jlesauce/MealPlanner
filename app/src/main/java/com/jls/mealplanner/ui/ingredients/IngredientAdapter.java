@@ -112,13 +112,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     }
 
     private void ingredientInGroceryListButtonClicked(IngredientViewHolder holder, final IngredientEntity ingredient) {
-        if (ingredient.isInGroceryList) {
-            ingredient.isInGroceryList = false;
-            holder.updateIngredientInGroceryListButton(false);
-        } else {
-            ingredient.isInGroceryList = true;
-            holder.updateIngredientInGroceryListButton(true);
-        }
+        ingredient.isInGroceryList = !ingredient.isInGroceryList;
+        holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
         this.ingredientsViewModel.updateIngredient(ingredient);
     }
 
