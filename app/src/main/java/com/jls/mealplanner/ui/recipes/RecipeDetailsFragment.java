@@ -2,6 +2,7 @@ package com.jls.mealplanner.ui.recipes;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,8 @@ import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
-import com.jls.mealplanner.model.IngredientIconViewModel;
-import com.jls.mealplanner.model.IngredientViewModel;
+import com.jls.mealplanner.model.IngredientIconsViewModel;
+import com.jls.mealplanner.model.IngredientsViewModel;
 import com.jls.mealplanner.model.RecipeViewModel;
 import com.jls.mealplanner.ui.ingredients.IngredientViewHolder;
 import com.jls.mealplanner.utils.AssetUtils;
@@ -32,15 +33,18 @@ import java.util.List;
 
 public class RecipeDetailsFragment extends Fragment {
 
+    private final String TAG = RecipeDetailsFragment.class.getSimpleName();
+
     private final RecipeViewModel recipesViewModel;
     private final RecipeEntity recipe;
-    private final IngredientViewModel ingredientsViewModel;
+    private final IngredientsViewModel ingredientsViewModel;
     private final HashMap<String, IngredientIconEntity> icons;
 
-    public RecipeDetailsFragment(RecipeViewModel recipesViewModel, IngredientViewModel ingredientsViewModel,
-                                 IngredientIconViewModel iconsViewModel,
+    public RecipeDetailsFragment(RecipeViewModel recipesViewModel, IngredientsViewModel ingredientsViewModel,
+                                 IngredientIconsViewModel iconsViewModel,
                                  RecipeEntity recipe) {
         super();
+        Log.d(TAG, "Creating new instance of RecipeDetailsFragment");
         this.recipesViewModel = recipesViewModel;
         this.ingredientsViewModel = ingredientsViewModel;
         this.recipe = recipe;

@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "Creating main activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void create_ui(Bundle savedInstanceState) {
-        Log.d(TAG, "Creating UI");
+        Log.d(TAG, "Creating UI components");
 
         Toolbar toolbar = createToolbar();
 
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i(TAG, "Searching text: " + newText);
+                Log.d(TAG, "Searching text: " + newText);
                 return false;
             }
         });

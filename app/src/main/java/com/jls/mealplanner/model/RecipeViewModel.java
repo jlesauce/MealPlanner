@@ -7,18 +7,18 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.jls.mealplanner.database.recipes.RecipeEntity;
-import com.jls.mealplanner.database.recipes.RecipeRepository;
+import com.jls.mealplanner.database.recipes.RecipesRepository;
 
 import java.util.List;
 
 public class RecipeViewModel extends AndroidViewModel {
 
-    private final RecipeRepository repository;
+    private final RecipesRepository repository;
     private final LiveData<List<RecipeEntity>> allRecipes;
 
     public RecipeViewModel(@NonNull Application application) {
         super(application);
-        repository = new RecipeRepository();
+        repository = new RecipesRepository();
         allRecipes = repository.getAllRecipes();
     }
 

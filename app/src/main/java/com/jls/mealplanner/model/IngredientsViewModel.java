@@ -12,12 +12,12 @@ import com.jls.mealplanner.database.ingredients.IngredientRepository;
 
 import java.util.List;
 
-public class IngredientViewModel extends AndroidViewModel {
+public class IngredientsViewModel extends AndroidViewModel {
 
     private final IngredientRepository repository;
     private final LiveData<List<IngredientEntity>> allIngredients;
 
-    public IngredientViewModel(@NonNull Application application) {
+    public IngredientsViewModel(@NonNull Application application) {
         super(application);
         repository = new IngredientRepository();
         allIngredients = repository.getAllIngredients();

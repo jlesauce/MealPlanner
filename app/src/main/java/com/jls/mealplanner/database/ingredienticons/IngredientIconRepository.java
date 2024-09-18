@@ -7,13 +7,13 @@ import com.jls.mealplanner.database.ApplicationDatabase;
 import java.util.List;
 
 public class IngredientIconRepository {
-    private final IngredientIconDao ingredientIconDao;
+    private final IngredientIconsDao ingredientIconsDao;
     private final LiveData<List<IngredientIconEntity>> allIngredientIcons;
 
     public IngredientIconRepository() {
         ApplicationDatabase db = ApplicationDatabase.getInstance();
-        ingredientIconDao = db.ingredientIconDao();
-        allIngredientIcons = ingredientIconDao.getAllIngredientIcons();
+        ingredientIconsDao = db.ingredientsIconDao();
+        allIngredientIcons = ingredientIconsDao.getAllIngredientIcons();
     }
 
     public LiveData<List<IngredientIconEntity>> getAllIngredientIcons() {
@@ -21,14 +21,14 @@ public class IngredientIconRepository {
     }
 
     public void insert(IngredientIconEntity ingredientIcon) {
-        ApplicationDatabase.databaseWriteExecutor.execute(() -> ingredientIconDao.insertIngredientIcon(ingredientIcon));
+        ApplicationDatabase.databaseWriteExecutor.execute(() -> ingredientIconsDao.insertIngredientIcon(ingredientIcon));
     }
 
     public void update(IngredientIconEntity ingredientIcon) {
-        ApplicationDatabase.databaseWriteExecutor.execute(() -> ingredientIconDao.updateIngredientIcon(ingredientIcon));
+        ApplicationDatabase.databaseWriteExecutor.execute(() -> ingredientIconsDao.updateIngredientIcon(ingredientIcon));
     }
 
     public void delete(IngredientIconEntity ingredientIcon) {
-        ApplicationDatabase.databaseWriteExecutor.execute(() -> ingredientIconDao.deleteIngredientIcon(ingredientIcon));
+        ApplicationDatabase.databaseWriteExecutor.execute(() -> ingredientIconsDao.deleteIngredientIcon(ingredientIcon));
     }
 }

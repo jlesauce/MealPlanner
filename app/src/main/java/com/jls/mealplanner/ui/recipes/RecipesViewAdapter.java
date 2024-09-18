@@ -4,9 +4,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,29 +11,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
-import com.jls.mealplanner.model.IngredientIconViewModel;
-import com.jls.mealplanner.model.IngredientViewModel;
+import com.jls.mealplanner.model.IngredientIconsViewModel;
+import com.jls.mealplanner.model.IngredientsViewModel;
 import com.jls.mealplanner.model.RecipeViewModel;
 
 import java.util.ArrayList;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
+public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
-    private static final String TAG = RecipeAdapter.class.getSimpleName();
+    private static final String TAG = RecipesViewAdapter.class.getSimpleName();
 
     private final Fragment topFragment;
     private final ArrayList<RecipeEntity> recipes;
     private final RecipeViewModel recipesViewModel;
-    private final IngredientIconViewModel iconsViewModel;
-    private final IngredientViewModel ingredientsViewModel;
+    private final IngredientIconsViewModel iconsViewModel;
+    private final IngredientsViewModel ingredientsViewModel;
 
-    public RecipeAdapter(@NonNull Fragment topFragment, @NonNull Fragment fragment, final RecipeListType listType,
-                         RecipeViewModel recipesViewModel, IngredientViewModel ingredientViewModel,
-                         IngredientIconViewModel iconsViewModel) {
+    public RecipesViewAdapter(@NonNull Fragment topFragment, @NonNull Fragment fragment, final RecipeListType listType,
+                              RecipeViewModel recipesViewModel, IngredientsViewModel ingredientsViewModel,
+                              IngredientIconsViewModel iconsViewModel) {
         this.topFragment = topFragment;
         this.recipes = new ArrayList<>();
         this.recipesViewModel = recipesViewModel;
-        this.ingredientsViewModel = ingredientViewModel;
+        this.ingredientsViewModel = ingredientsViewModel;
         this.iconsViewModel = iconsViewModel;
 
         recipesViewModel.getAllRecipes().observe(fragment, allRecipes -> {
@@ -99,23 +96,5 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public int getItemCount() {
         return recipes == null ? 0 : recipes.size();
-    }
-
-    public static class RecipeViewHolder extends RecyclerView.ViewHolder {
-        ImageView recipeIcon;
-        TextView recipeName;
-        ImageButton addRecipeToFavorites;
-
-        public RecipeViewHolder(@NonNull View itemView) {
-            super(itemView);
-            recipeIcon = itemView.findViewById(R.id.recipeIcon);
-            recipeName = itemView.findViewById(R.id.recipeName);
-            addRecipeToFavorites = itemView.findViewById(R.id.addRecipeToFavorites);
-        }
-
-        public void updateRecipeInFavoritesButton(boolean isInFavorites) {
-            addRecipeToFavorites.setImageResource(
-                    isInFavorites ? R.drawable.favorite_icon_enabled : R.drawable.favorite_icon_disabled);
-        }
     }
 }

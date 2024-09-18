@@ -7,11 +7,11 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.jls.mealplanner.database.ingredienticons.IngredientIconDao;
+import com.jls.mealplanner.database.ingredienticons.IngredientIconsDao;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
-import com.jls.mealplanner.database.ingredients.IngredientDao;
+import com.jls.mealplanner.database.ingredients.IngredientsDao;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
-import com.jls.mealplanner.database.recipes.RecipeDao;
+import com.jls.mealplanner.database.recipes.RecipesDao;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
 import com.jls.mealplanner.utils.AssetUtils;
 
@@ -70,11 +70,11 @@ public abstract class ApplicationDatabase extends RoomDatabase {
         return ApplicationDatabase.INSTANCE;
     }
 
-    public abstract IngredientDao ingredientDao();
+    public abstract IngredientsDao ingredientsDao();
 
-    public abstract IngredientIconDao ingredientIconDao();
+    public abstract IngredientIconsDao ingredientsIconDao();
 
-    public abstract RecipeDao recipeDao();
+    public abstract RecipesDao recipesDao();
 
     public static void copyDefaultDatabaseToApplicationStorage(final Context context) throws IOException {
         File databaseFile = context.getDatabasePath(DATABASE_NAME);

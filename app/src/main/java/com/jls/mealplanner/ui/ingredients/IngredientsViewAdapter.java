@@ -13,24 +13,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
-import com.jls.mealplanner.model.IngredientIconViewModel;
-import com.jls.mealplanner.model.IngredientViewModel;
+import com.jls.mealplanner.model.IngredientIconsViewModel;
+import com.jls.mealplanner.model.IngredientsViewModel;
 import com.jls.mealplanner.utils.AssetUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
+public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
 
-    private final IngredientViewModel ingredientsViewModel;
+    private final IngredientsViewModel ingredientsViewModel;
     private final IngredientListType ingredientsListType;
     private final ArrayList<IngredientEntity> ingredients;
     private final HashMap<String, IngredientIconEntity> icons;
 
-    private final String TAG = IngredientAdapter.class.getSimpleName();
+    private final String TAG = IngredientsViewAdapter.class.getSimpleName();
 
-    public IngredientAdapter(Fragment fragment, IngredientViewModel viewModel, IngredientIconViewModel iconsViewModel,
-                             final IngredientListType ingredientListType) {
+    public IngredientsViewAdapter(Fragment fragment, IngredientsViewModel viewModel, IngredientIconsViewModel iconsViewModel,
+                                  final IngredientListType ingredientListType) {
         this.ingredientsViewModel = viewModel;
         this.ingredientsListType = ingredientListType;
         this.ingredients = new ArrayList<>();

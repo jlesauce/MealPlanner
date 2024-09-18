@@ -11,12 +11,12 @@ import com.jls.mealplanner.database.ingredienticons.IngredientIconRepository;
 
 import java.util.List;
 
-public class IngredientIconViewModel extends AndroidViewModel {
+public class IngredientIconsViewModel extends AndroidViewModel {
 
     private final IngredientIconRepository repository;
     private final LiveData<List<IngredientIconEntity>> allIngredientIcons;
 
-    public IngredientIconViewModel(@NonNull Application application) {
+    public IngredientIconsViewModel(@NonNull Application application) {
         super(application);
         repository = new IngredientIconRepository();
         allIngredientIcons = repository.getAllIngredientIcons();

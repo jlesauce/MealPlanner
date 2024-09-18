@@ -10,7 +10,7 @@ import androidx.room.Update;
 import java.util.List;
 
 @Dao
-public interface RecipeDao {
+public interface RecipesDao {
     @Query("SELECT * FROM recipes")
     LiveData<List<RecipeEntity>> getAllRecipes();
 

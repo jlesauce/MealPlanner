@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
-import com.jls.mealplanner.model.IngredientIconViewModel;
-import com.jls.mealplanner.model.IngredientViewModel;
+import com.jls.mealplanner.model.IngredientIconsViewModel;
+import com.jls.mealplanner.model.IngredientsViewModel;
 import com.jls.mealplanner.model.RecipeViewModel;
 import com.jls.mealplanner.ui.TabFragment;
 
@@ -34,13 +34,13 @@ public class RecipesTabFragment extends TabFragment {
     protected void onCustomCreateView(RecyclerView recyclerView) {
         RecipeViewModel recipesViewModel = new ViewModelProvider(requireActivity())
                 .get(RecipeViewModel.class);
-        IngredientViewModel ingredientsViewModel = new ViewModelProvider(requireActivity())
-                .get(IngredientViewModel.class);
-        IngredientIconViewModel iconsViewModel = new ViewModelProvider(requireActivity())
-                .get(IngredientIconViewModel.class);
+        IngredientsViewModel ingredientsViewModel = new ViewModelProvider(requireActivity())
+                .get(IngredientsViewModel.class);
+        IngredientIconsViewModel iconsViewModel = new ViewModelProvider(requireActivity())
+                .get(IngredientIconsViewModel.class);
 
-        RecipeAdapter adapter = new RecipeAdapter(topFragment, this, this.listType, recipesViewModel,
-                                                  ingredientsViewModel, iconsViewModel);
+        RecipesViewAdapter adapter = new RecipesViewAdapter(topFragment, this, this.listType, recipesViewModel,
+                                                            ingredientsViewModel, iconsViewModel);
         recyclerView.setAdapter(adapter);
     }
 }
