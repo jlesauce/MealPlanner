@@ -69,7 +69,7 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
                 icons.put(icon.shortName, icon);
             }
 
-            notifyDataSetChanged();
+            notifyItemRangeInserted(0, icons.size());
         });
     }
 
@@ -108,15 +108,19 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
     }
 
     private void ingredientInGroceryListButtonClicked(IngredientViewHolder holder, final IngredientEntity ingredient) {
+        int position = holder.getAdapterPosition();
         ingredient.isInGroceryList = !ingredient.isInGroceryList;
         holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
         this.ingredientsViewModel.updateIngredient(ingredient);
+        notifyItemChanged(position);
     }
 
     private void ingredientInMyIngredientsCheckBoxClicked(IngredientViewHolder holder,
                                                           final IngredientEntity ingredient) {
+        int position = holder.getAdapterPosition();
         ingredient.isPossessed = !ingredient.isPossessed;
         this.ingredientsViewModel.updateIngredient(ingredient);
+        notifyItemChanged(position);
     }
 
     @Override
