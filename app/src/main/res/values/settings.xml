@@ -3,4 +3,8 @@
     <bool name="force_database_reinstall">true</bool>
     <bool name="execute_user_test_request">false</bool>
     <string name="push_bullet_api_key" translatable="false">0000</string>
+    <dimen name="default_text_size">20sp</dimen>
+    <dimen name="augmented_text_size">24sp</dimen>
+    <dimen name="reduced_text_size">16sp</dimen>
+    <dimen name="default_block_margin_gap">15sp</dimen>
 </resources>

@@ -20,4 +20,6 @@
     <string name="more_options">Plus d\'options</string>
     <string name="add_to_grocery_list">Ajouter à la liste</string>
     <string name="add_to_favorites">Ajouter aux favoris</string>
+    <string name="recipe_steps_label">Etapes de la recette :</string>
+    <string name="ingredients_list_label">Liste des ingrédients :</string>
 </resources>

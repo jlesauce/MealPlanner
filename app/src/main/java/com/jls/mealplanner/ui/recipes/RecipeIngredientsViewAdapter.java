@@ -1,12 +1,12 @@
-package com.jls.mealplanner.ui.ingredients;
+package com.jls.mealplanner.ui.recipes;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,49 +15,27 @@ import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
 import com.jls.mealplanner.model.IngredientIconsViewModel;
 import com.jls.mealplanner.model.IngredientsViewModel;
+import com.jls.mealplanner.ui.ingredients.IngredientViewHolder;
 import com.jls.mealplanner.utils.AssetUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
-
-    private final String TAG = IngredientsViewAdapter.class.getSimpleName();
+public class RecipeIngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
 
     private final IngredientsViewModel ingredientsViewModel;
-    private final IngredientListType ingredientsListType;
-    private final ArrayList<IngredientEntity> ingredients;
     private final HashMap<String, IngredientIconEntity> icons;
+    private final ArrayList<String> ingredientNames;
+    private final Fragment fragment;
 
-    public IngredientsViewAdapter(Fragment fragment, IngredientsViewModel viewModel,
-                                  IngredientIconsViewModel iconsViewModel,
-                                  final IngredientListType ingredientListType) {
+    public RecipeIngredientsViewAdapter(Fragment fragment, IngredientsViewModel viewModel,
+                                        IngredientIconsViewModel iconsViewModel,
+                                        ArrayList<String> ingredientNames) {
+        this.fragment = fragment;
         this.ingredientsViewModel = viewModel;
-        this.ingredientsListType = ingredientListType;
-        this.ingredients = new ArrayList<>();
         this.icons = new HashMap<>();
+        this.ingredientNames = ingredientNames;
 
-
-        this.ingredientsViewModel.getAllIngredients().observe(fragment, allIngredients -> {
-            IngredientListType v = ingredientsListType;
-
-            if (allIngredients == null) {
-                return;
-            }
-
-            ingredients.clear();
-            for (IngredientEntity ingredient : allIngredients) {
-                if (v == IngredientListType.MY_STOCK && ingredient.isPossessed) {
-                    ingredients.add(ingredient);
-                } else if (v == IngredientListType.MY_GROCERY_LIST && ingredient.isInGroceryList) {
-                    ingredients.add(ingredient);
-                } else if (v == IngredientListType.ALL_INGREDIENTS) {
-                    ingredients.add(ingredient);
-                }
-            }
-
-            notifyDataSetChanged();
-        });
 
         iconsViewModel.getAllIngredientIcons().observe(fragment, allIcons -> {
             if (allIcons == null) {
@@ -69,7 +47,7 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
                 icons.put(icon.shortName, icon);
             }
 
-            notifyDataSetChanged();
+            notifyItemRangeInserted(0, ingredientNames.size());
         });
     }
 
@@ -82,24 +60,38 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, final int position) {
-        IngredientEntity currentIngredient = ingredients.get(position);
-        initIngredientItem(holder, currentIngredient);
+        String currentIngredientName = ingredientNames.get(position);
+        ingredientsViewModel.searchIngredient(currentIngredientName)
+                .observe(fragment.getViewLifecycleOwner(), ingredientEntity -> {
+                    onSearchIngredientResultReceived(holder, ingredientEntity, currentIngredientName);
+                });
     }
 
-    private void initIngredientItem(@NonNull IngredientViewHolder holder, final IngredientEntity ingredient) {
+    private void onSearchIngredientResultReceived(@NonNull IngredientViewHolder holder,
+                                                  IngredientEntity ingredientEntity, String ingredientName) {
+        int position = holder.getAdapterPosition();
+
+        if (ingredientEntity != null) {
+            updateViewWithIngredientEntity(ingredientEntity, holder);
+        } else {
+            updateViewWhenIngredientNotFound(holder, ingredientName);
+        }
+        notifyItemChanged(position);
+    }
+
+    private void updateViewWithIngredientEntity(IngredientEntity ingredient, IngredientViewHolder holder) {
         holder.ingredientName.setText(ingredient.name);
         holder.addToMyIngredientsCheckBox.setChecked(ingredient.isPossessed);
+        holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
 
         IngredientIconEntity iconEntity = icons.get(ingredient.iconId);
         if (iconEntity != null) {
-            Bitmap bitmapIcon = AssetUtils.getIconFromAssets(holder.ingredientIcon.getContext(), iconEntity.iconPath);
+            Bitmap bitmapIcon = AssetUtils.getIconFromAssets(holder.ingredientIcon.getContext(),
+                                                             iconEntity.iconPath);
             holder.ingredientIcon.setImageBitmap(bitmapIcon);
         } else {
-            Log.e(TAG, "Icon not found for ingredient: " + ingredient.name + " with iconId: " + ingredient.iconId);
             holder.ingredientIcon.setImageResource(R.drawable.ingredients_icon);
         }
-
-        holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
 
         holder.addIngredientToGroceryList.setOnClickListener(
                 v -> ingredientInGroceryListButtonClicked(holder, ingredient));
@@ -107,20 +99,30 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
                 v -> ingredientInMyIngredientsCheckBoxClicked(holder, ingredient));
     }
 
+    private static void updateViewWhenIngredientNotFound(IngredientViewHolder holder, String ingredientName) {
+        holder.ingredientIcon.setImageResource(R.drawable.ingredients_icon);
+        holder.ingredientName.setText(ingredientName);
+        holder.addIngredientToGroceryList.setVisibility(View.GONE);
+        holder.addToMyIngredientsCheckBox.setVisibility(View.GONE);
+        holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.gray));
+    }
+
     private void ingredientInGroceryListButtonClicked(IngredientViewHolder holder, final IngredientEntity ingredient) {
         ingredient.isInGroceryList = !ingredient.isInGroceryList;
         holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
         this.ingredientsViewModel.updateIngredient(ingredient);
+        notifyItemChanged(holder.getAdapterPosition());
     }
 
     private void ingredientInMyIngredientsCheckBoxClicked(IngredientViewHolder holder,
                                                           final IngredientEntity ingredient) {
         ingredient.isPossessed = !ingredient.isPossessed;
         this.ingredientsViewModel.updateIngredient(ingredient);
+        notifyItemChanged(holder.getAdapterPosition());
     }
 
     @Override
     public int getItemCount() {
-        return ingredients == null ? 0 : ingredients.size();
+        return ingredientNames == null ? 0 : ingredientNames.size();
     }
 }

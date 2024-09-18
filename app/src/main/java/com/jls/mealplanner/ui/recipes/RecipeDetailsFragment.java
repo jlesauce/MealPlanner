@@ -1,8 +1,8 @@
 package com.jls.mealplanner.ui.recipes;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,23 +12,20 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jls.mealplanner.R;
-import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
-import com.jls.mealplanner.database.ingredients.IngredientEntity;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
 import com.jls.mealplanner.model.IngredientIconsViewModel;
 import com.jls.mealplanner.model.IngredientsViewModel;
 import com.jls.mealplanner.model.RecipeViewModel;
-import com.jls.mealplanner.ui.ingredients.IngredientViewHolder;
-import com.jls.mealplanner.utils.AssetUtils;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeDetailsFragment extends Fragment {
@@ -38,28 +35,16 @@ public class RecipeDetailsFragment extends Fragment {
     private final RecipeViewModel recipesViewModel;
     private final RecipeEntity recipe;
     private final IngredientsViewModel ingredientsViewModel;
-    private final HashMap<String, IngredientIconEntity> icons;
+    private final IngredientIconsViewModel iconsViewModel;
 
     public RecipeDetailsFragment(RecipeViewModel recipesViewModel, IngredientsViewModel ingredientsViewModel,
-                                 IngredientIconsViewModel iconsViewModel,
-                                 RecipeEntity recipe) {
+                                 IngredientIconsViewModel iconsViewModel, RecipeEntity recipe) {
         super();
-        Log.d(TAG, "Creating new instance of RecipeDetailsFragment");
+        Log.d(TAG, "Creating new instance of " + TAG);
         this.recipesViewModel = recipesViewModel;
         this.ingredientsViewModel = ingredientsViewModel;
+        this.iconsViewModel = iconsViewModel;
         this.recipe = recipe;
-        this.icons = new HashMap<>();
-
-        iconsViewModel.getAllIngredientIcons().observe(this, allIcons -> {
-            if (allIcons == null) {
-                return;
-            }
-
-            icons.clear();
-            for (IngredientIconEntity icon : allIcons) {
-                icons.put(icon.shortName, icon);
-            }
-        });
     }
 
     @Nullable
@@ -71,45 +56,34 @@ public class RecipeDetailsFragment extends Fragment {
         ImageButton favoriteButton = view.findViewById(R.id.favoriteButton);
         TextView recipeDescription = view.findViewById(R.id.recipeDescription);
         LinearLayout stepsContainer = view.findViewById(R.id.stepsContainer);
-        LinearLayout ingredientsContainer = view.findViewById(R.id.ingredientsContainer);
+        RecyclerView ingredientsRecyclerView = view.findViewById(R.id.ingredientsRecyclerView);
+        Pair<List<String>, ArrayList<String>> stepsAndIngredients = extractStepsAndIngredients(recipe);
 
         recipeName.setText(recipe.name);
         recipeDescription.setText(recipe.description);
         updateRecipeInFavoritesButton(favoriteButton, recipe.isInFavorite);
-
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<String>>() {
-        }.getType();
-        List<String> steps = gson.fromJson(recipe.stepsAsJson, listType);
-        List<String> ingredients = gson.fromJson(recipe.ingredientsAsJson, listType);
-
-        updateRecipeStepsContainer(steps, stepsContainer);
+        updateRecipeStepsContainer(stepsAndIngredients.first, stepsContainer);
+        createIngredientsListRecyclerView(stepsAndIngredients.second, ingredientsRecyclerView);
 
         favoriteButton.setOnClickListener(v -> recipeToFavoritesButtonClicked(favoriteButton));
-
-        ingredientsViewModel.getAllIngredients().observe(getViewLifecycleOwner(), allIngredients -> {
-            updateRecipeIngredientsContainer(ingredients, ingredientsContainer);
-        });
 
         return view;
     }
 
+    private Pair<List<String>, ArrayList<String>> extractStepsAndIngredients(RecipeEntity recipe) {
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<String>>() {
+        }.getType();
+        List<String> steps = gson.fromJson(recipe.stepsAsJson, listType);
+        ArrayList<String> ingredients = gson.fromJson(recipe.ingredientsAsJson, listType);
+        return new Pair<>(steps, ingredients);
+    }
+
     private void recipeToFavoritesButtonClicked(ImageButton favoriteButton) {
         recipe.isInFavorite = !recipe.isInFavorite;
+        Log.d(TAG, "Add recipe to favorites button clicked, isInFavorite=" + recipe.isInFavorite);
         updateRecipeInFavoritesButton(favoriteButton, recipe.isInFavorite);
         this.recipesViewModel.updateRecipe(recipe);
-    }
-
-    private void ingredientInGroceryListButtonClicked(IngredientViewHolder holder, final IngredientEntity ingredient) {
-        ingredient.isInGroceryList = !ingredient.isInGroceryList;
-        holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
-        this.ingredientsViewModel.updateIngredient(ingredient);
-    }
-
-    private void ingredientInMyIngredientsCheckBoxClicked(IngredientViewHolder holder,
-                                                          final IngredientEntity ingredient) {
-        ingredient.isPossessed = !ingredient.isPossessed;
-        this.ingredientsViewModel.updateIngredient(ingredient);
     }
 
     public void updateRecipeInFavoritesButton(ImageButton favoriteButton, boolean isInFavorites) {
@@ -125,56 +99,13 @@ public class RecipeDetailsFragment extends Fragment {
         }
     }
 
-    private void updateRecipeIngredientsContainer(List<String> ingredients, LinearLayout ingredientsContainer) {
-        ingredientsContainer.removeAllViews();
-
-        for (String ingredientName : ingredients) {
-            ingredientsViewModel.searchIngredient(ingredientName).observe(getViewLifecycleOwner(), ingredientEntity -> {
-                onSearchIngredientResultReceived(ingredientsContainer, ingredientEntity, ingredientName);
-            });
-        }
-    }
-
-    private void onSearchIngredientResultReceived(LinearLayout ingredientsContainer,
-                                                  IngredientEntity ingredientEntity, String ingredientName) {
-        View itemView = LayoutInflater.from(getContext())
-                .inflate(R.layout.item_ingredient, ingredientsContainer, false);
-        IngredientViewHolder holder = new IngredientViewHolder(itemView);
-
-        if (ingredientEntity != null) {
-            updateViewWithIngredientEntity(ingredientEntity, holder);
-        } else {
-            updateViewWhenIngredientNotFound(holder, ingredientName);
-        }
-
-        ingredientsContainer.addView(itemView);
-    }
-
-    private void updateViewWithIngredientEntity(IngredientEntity ingredient, IngredientViewHolder holder) {
-        holder.ingredientName.setText(ingredient.name);
-        holder.addToMyIngredientsCheckBox.setChecked(ingredient.isPossessed);
-        holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
-
-        IngredientIconEntity iconEntity = icons.get(ingredient.iconId);
-        if (iconEntity != null) {
-            Bitmap bitmapIcon = AssetUtils.getIconFromAssets(holder.ingredientIcon.getContext(),
-                                                             iconEntity.iconPath);
-            holder.ingredientIcon.setImageBitmap(bitmapIcon);
-        } else {
-            holder.ingredientIcon.setImageResource(R.drawable.ingredients_icon);
-        }
-
-        holder.addIngredientToGroceryList.setOnClickListener(
-                v -> ingredientInGroceryListButtonClicked(holder, ingredient));
-        holder.addToMyIngredientsCheckBox.setOnClickListener(
-                v -> ingredientInMyIngredientsCheckBoxClicked(holder, ingredient));
-    }
-
-    private static void updateViewWhenIngredientNotFound(IngredientViewHolder holder, String ingredientName) {
-        holder.ingredientIcon.setImageResource(R.drawable.ingredients_icon);
-        holder.ingredientName.setText(ingredientName);
-        holder.addIngredientToGroceryList.setVisibility(View.GONE);
-        holder.addToMyIngredientsCheckBox.setVisibility(View.GONE);
-        holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.gray));
+    private void createIngredientsListRecyclerView(ArrayList<String> ingredients,
+                                                   RecyclerView ingredientsRecyclerView) {
+        RecipeIngredientsViewAdapter viewAdapter = new RecipeIngredientsViewAdapter(this,
+                                                                                    ingredientsViewModel,
+                                                                                    iconsViewModel,
+                                                                                    ingredients);
+        ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ingredientsRecyclerView.setAdapter(viewAdapter);
     }
 }
