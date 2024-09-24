@@ -56,7 +56,7 @@ public class RecipeDetailsFragment extends Fragment {
         ImageButton favoriteButton = view.findViewById(R.id.favoriteButton);
         TextView recipeDescription = view.findViewById(R.id.recipeDescription);
         LinearLayout stepsContainer = view.findViewById(R.id.stepsContainer);
-        RecyclerView ingredientsRecyclerView = view.findViewById(R.id.ingredientsRecyclerView);
+        RecyclerView ingredientsRecyclerView = view.findViewById(R.id.recipeIngredientsRecyclerView);
         Pair<List<String>, ArrayList<String>> stepsAndIngredients = extractStepsAndIngredients(recipe);
 
         recipeName.setText(recipe.name);

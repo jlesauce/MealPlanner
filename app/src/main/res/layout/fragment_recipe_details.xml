@@ -62,7 +62,7 @@
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ingredientsRecyclerView"
+        android:id="@+id/recipeIngredientsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

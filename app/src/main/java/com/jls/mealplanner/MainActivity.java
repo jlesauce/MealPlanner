@@ -24,11 +24,14 @@ import com.google.android.material.navigation.NavigationView;
 import com.jls.mealplanner.database.ApplicationDatabase;
 import com.jls.mealplanner.model.SharedDataHolder;
 import com.jls.mealplanner.ui.IngredientsFragment;
+import com.jls.mealplanner.ui.OnUserSearchChangeListener;
 import com.jls.mealplanner.ui.PlanningFragment;
 import com.jls.mealplanner.ui.RecipesFragment;
 import com.jls.mealplanner.utils.PushBulletClient;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,12 +39,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout = null;
     private SharedDataHolder sharedDataHolder;
+    private Set<OnUserSearchChangeListener> onUserSearchChangeListeners;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "Creating main activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        onUserSearchChangeListeners = new HashSet<>();
 
         sharedDataHolder = SharedDataHolder.getInstance();
         initializeDatabase();
@@ -97,9 +102,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.d(TAG, "Searching text: " + newText);
-                return false;
+            public boolean onQueryTextChange(String text) {
+                String userSearchedText = text.trim().toLowerCase();
+                Log.d(TAG, "User searched text: " + userSearchedText);
+                for (OnUserSearchChangeListener listener : onUserSearchChangeListeners) {
+                    listener.onUserSearchText(userSearchedText);
+                }
+                return true;
             }
         });
 
@@ -122,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void addHandleBackPressedCallback() {
-        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -137,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    public void addOnQueryTextChangeCallback(OnUserSearchChangeListener onUserSearchChangeListener) {
+        onUserSearchChangeListeners.add(onUserSearchChangeListener);
     }
 
     @Override

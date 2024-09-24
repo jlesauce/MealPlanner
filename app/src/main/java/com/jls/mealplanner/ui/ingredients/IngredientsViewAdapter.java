@@ -8,35 +8,42 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jls.mealplanner.MainActivity;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
 import com.jls.mealplanner.model.IngredientIconsViewModel;
 import com.jls.mealplanner.model.IngredientsViewModel;
+import com.jls.mealplanner.ui.OnUserSearchChangeListener;
 import com.jls.mealplanner.utils.AssetUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
+public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewHolder>
+        implements OnUserSearchChangeListener {
 
     private final String TAG = IngredientsViewAdapter.class.getSimpleName();
 
     private final IngredientsViewModel ingredientsViewModel;
     private final IngredientListType ingredientsListType;
     private final ArrayList<IngredientEntity> ingredients;
+    private final ArrayList<IngredientEntity> visibleIngredients;
     private final HashMap<String, IngredientIconEntity> icons;
+    private String userSearchedTextFilter;
 
-    public IngredientsViewAdapter(Fragment fragment, IngredientsViewModel viewModel,
-                                  IngredientIconsViewModel iconsViewModel,
-                                  final IngredientListType ingredientListType) {
+    public IngredientsViewAdapter(FragmentActivity fragmentActivity, Fragment fragment, IngredientsViewModel viewModel,
+                                  IngredientIconsViewModel iconsViewModel, IngredientListType ingredientListType) {
+        MainActivity activity = (MainActivity) fragmentActivity;
         this.ingredientsViewModel = viewModel;
         this.ingredientsListType = ingredientListType;
         this.ingredients = new ArrayList<>();
+        this.visibleIngredients = new ArrayList<>();
         this.icons = new HashMap<>();
-
+        this.userSearchedTextFilter = "";
 
         this.ingredientsViewModel.getAllIngredients().observe(fragment, allIngredients -> {
             IngredientListType v = ingredientsListType;
@@ -56,7 +63,7 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
                 }
             }
 
-            notifyDataSetChanged();
+            updateVisibleIngredientList(userSearchedTextFilter);
         });
 
         iconsViewModel.getAllIngredientIcons().observe(fragment, allIcons -> {
@@ -71,6 +78,8 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
 
             notifyItemRangeInserted(0, icons.size());
         });
+
+        activity.addOnQueryTextChangeCallback(this);
     }
 
     @NonNull
@@ -82,8 +91,28 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, final int position) {
-        IngredientEntity currentIngredient = ingredients.get(position);
+        IngredientEntity currentIngredient = visibleIngredients.get(position);
         initIngredientItem(holder, currentIngredient);
+    }
+
+    public void onFragmentResume() {
+        // This method is called when the fragment is resumed.
+    }
+
+    @Override
+    public void onUserSearchText(String text) {
+        userSearchedTextFilter = text;
+        updateVisibleIngredientList(text);
+    }
+
+    private void updateVisibleIngredientList(String textFilter) {
+        visibleIngredients.clear();
+        for (IngredientEntity ingredient : ingredients) {
+            if (ingredient.name.toLowerCase().contains(textFilter)) {
+                visibleIngredients.add(ingredient);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     private void initIngredientItem(@NonNull IngredientViewHolder holder, final IngredientEntity ingredient) {
@@ -125,6 +154,6 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
 
     @Override
     public int getItemCount() {
-        return ingredients == null ? 0 : ingredients.size();
+        return visibleIngredients == null ? 0 : visibleIngredients.size();
     }
 }
