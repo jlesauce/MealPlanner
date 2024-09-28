@@ -7,12 +7,14 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.jls.mealplanner.database.ingredienticons.IngredientIconsDao;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
-import com.jls.mealplanner.database.ingredients.IngredientsDao;
+import com.jls.mealplanner.database.ingredienticons.IngredientIconsDao;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
-import com.jls.mealplanner.database.recipes.RecipesDao;
+import com.jls.mealplanner.database.ingredients.IngredientsDao;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
+import com.jls.mealplanner.database.recipes.RecipesDao;
+import com.jls.mealplanner.database.weeklyrecipes.WeeklyRecipeDao;
+import com.jls.mealplanner.database.weeklyrecipes.WeeklyRecipeEntity;
 import com.jls.mealplanner.utils.AssetUtils;
 
 import java.io.File;
@@ -26,7 +28,8 @@ import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {IngredientEntity.class, IngredientIconEntity.class, RecipeEntity.class}, version = 6, exportSchema = false)
+@Database(entities = {IngredientEntity.class, IngredientIconEntity.class, RecipeEntity.class, WeeklyRecipeEntity.class},
+        version = 8, exportSchema = false)
 public abstract class ApplicationDatabase extends RoomDatabase {
 
     private static final String DEFAULT_DB_NAME = "default_database.db";
@@ -75,6 +78,8 @@ public abstract class ApplicationDatabase extends RoomDatabase {
     public abstract IngredientIconsDao ingredientsIconDao();
 
     public abstract RecipesDao recipesDao();
+
+    public abstract WeeklyRecipeDao weeklyRecipeDao();
 
     public static void copyDefaultDatabaseToApplicationStorage(final Context context) throws IOException {
         File databaseFile = context.getDatabasePath(DATABASE_NAME);

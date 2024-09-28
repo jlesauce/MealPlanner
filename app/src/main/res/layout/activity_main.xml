@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/week_navigation_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
@@ -36,5 +36,4 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@menu/navigation_menu_header"
         app:menu="@menu/navigation_menu" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -12,10 +12,10 @@ public class IngredientEntity {
     @ColumnInfo(name = "name")
     public String name;
 
-    @ColumnInfo(name = "isPossessed")
+    @ColumnInfo(name = "is_possessed")
     public boolean isPossessed;
 
-    @ColumnInfo(name = "isInGroceryList")
+    @ColumnInfo(name = "is_in_grocery_list")
     public boolean isInGroceryList;
 
     @ColumnInfo(name = "icon_id")

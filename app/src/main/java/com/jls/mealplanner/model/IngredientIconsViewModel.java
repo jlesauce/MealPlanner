@@ -26,10 +26,6 @@ public class IngredientIconsViewModel extends AndroidViewModel {
         return allIngredientIcons;
     }
 
-    public void updateIngredientIcon(IngredientIconEntity ingredientIcon) {
-        repository.update(ingredientIcon);
-    }
-
     public void insert(IngredientIconEntity ingredientIcon) {
         repository.insert(ingredientIcon);
     }

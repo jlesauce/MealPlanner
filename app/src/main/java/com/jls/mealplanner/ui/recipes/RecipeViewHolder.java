@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jls.mealplanner.R;
 
 public class RecipeViewHolder extends RecyclerView.ViewHolder {
-    ImageView recipeIcon;
-    TextView recipeName;
-    ImageButton addRecipeToFavorites;
+    public ImageView recipeIcon;
+    public TextView recipeName;
+    public ImageButton addRecipeToFavorites;
 
     public RecipeViewHolder(@NonNull View itemView) {
         super(itemView);

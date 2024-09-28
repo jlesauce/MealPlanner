@@ -27,8 +27,4 @@ public class IngredientIconRepository {
     public void update(IngredientIconEntity ingredientIcon) {
         ApplicationDatabase.databaseWriteExecutor.execute(() -> ingredientIconsDao.updateIngredientIcon(ingredientIcon));
     }
-
-    public void delete(IngredientIconEntity ingredientIcon) {
-        ApplicationDatabase.databaseWriteExecutor.execute(() -> ingredientIconsDao.deleteIngredientIcon(ingredientIcon));
-    }
 }
