@@ -4,14 +4,17 @@
     <selectionStates>
       <SelectionState runConfigName="MealPlanner">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-07-30T10:31:16.826877900Z">
+        <DropdownSelection timestamp="2025-01-06T09:56:17.983895200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\jlesauce\.android\avd\Samsung_Galaxy_S7_API_26_Android_8_.avd" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=ce091719d58b8c3404" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
+      </SelectionState>
+      <SelectionState runConfigName="app">
+        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
   </component>
