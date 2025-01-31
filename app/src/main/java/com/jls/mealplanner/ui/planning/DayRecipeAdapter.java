@@ -22,6 +22,7 @@ import com.jls.mealplanner.ui.PlanningFragment;
 import com.jls.mealplanner.ui.recipes.RecipeViewHolder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +36,11 @@ public class DayRecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     private final ArrayList<WeeklyRecipeEntity> recipesForTheDay;
     private final HashMap<Integer, RecipeEntity> allRecipes;
     private final Map<String, Observer<List<WeeklyRecipeEntity>>> weeklyRecipesObservers;
+    private final WeeklyRecipesViewModel weeklyRecipesViewModel;
 
     public DayRecipeAdapter(PlanningFragment fragment, WeeklyRecipesViewModel weeklyRecipesViewModel, int currentDay) {
         this.fragment = fragment;
+        this.weeklyRecipesViewModel = weeklyRecipesViewModel;
         this.recipesForTheDay = new ArrayList<>();
         this.allRecipes = new HashMap<>();
         this.weeklyRecipesObservers = new HashMap<>();
@@ -55,13 +58,13 @@ public class DayRecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         });
 
         weeklyRecipesViewModel.getSelectedWeekNumber().observe(fragment, weekNumber -> {
-            updateDayRecipes(fragment, weeklyRecipesViewModel, weekNumber, currentDay);
+            updateDayRecipes(fragment, weeklyRecipesViewModel, getCurrentYear(), weekNumber, currentDay);
             notifyDataSetChanged();
         });
     }
 
     private void updateDayRecipes(PlanningFragment fragment, WeeklyRecipesViewModel weeklyRecipesViewModel,
-                                  int currentWeek, int currentDay) {
+                                  int currentYear, int currentWeek, int currentDay) {
         /*
           Implementing a map to store the observers for each day of the week to avoid multiple observers for the same
           day and week, because otherwise, each time the week is changed, a new observer is created for the same day.
@@ -70,7 +73,8 @@ public class DayRecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         Observer<List<WeeklyRecipeEntity>> currentObserver = weeklyRecipesObservers.get(key);
 
         if (currentObserver != null) {
-            weeklyRecipesViewModel.getRecipeForDay(currentWeek, currentDay).removeObserver(currentObserver);
+            weeklyRecipesViewModel.getRecipeForDay(currentYear, currentWeek, currentDay)
+                    .removeObserver(currentObserver);
         }
 
         currentObserver = recipes -> {
@@ -85,7 +89,7 @@ public class DayRecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         };
 
         weeklyRecipesObservers.put(key, currentObserver);
-        weeklyRecipesViewModel.getRecipeForDay(currentWeek, currentDay).observe(fragment, currentObserver);
+        weeklyRecipesViewModel.getRecipeForDay(currentYear, currentWeek, currentDay).observe(fragment, currentObserver);
     }
 
     @NonNull
@@ -130,6 +134,11 @@ public class DayRecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) holder.itemView.getLayoutParams();
         layoutParams.setMargins(0, 0, 0, 0);
         holder.itemView.setLayoutParams(layoutParams);
+    }
+
+    private int getCurrentYear() {
+        Integer year = weeklyRecipesViewModel.getSelectedYear().getValue();
+        return year != null ? year : Calendar.getInstance().get(Calendar.YEAR);
     }
 
     @Override

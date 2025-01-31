@@ -13,6 +13,6 @@ public interface WeeklyRecipeDao {
     @Insert
     void insert(WeeklyRecipeEntity weeklyRecipe);
 
-    @Query("SELECT * FROM weekly_recipes WHERE week_number = :weekNumber AND day_of_week = :dayOfWeek")
-    LiveData<List<WeeklyRecipeEntity>> getRecipesForDay(int weekNumber, int dayOfWeek);
+    @Query("SELECT * FROM weekly_recipes WHERE week_number = :weekNumber AND day_of_week = :dayOfWeek AND year = :year")
+    LiveData<List<WeeklyRecipeEntity>> getRecipesForDay(int year, int weekNumber, int dayOfWeek);
 }

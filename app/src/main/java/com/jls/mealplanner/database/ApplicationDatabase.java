@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {IngredientEntity.class, IngredientIconEntity.class, RecipeEntity.class, WeeklyRecipeEntity.class},
-        version = 8, exportSchema = false)
+        version = 9, exportSchema = false)
 public abstract class ApplicationDatabase extends RoomDatabase {
 
     private static final String DEFAULT_DB_NAME = "default_database.db";

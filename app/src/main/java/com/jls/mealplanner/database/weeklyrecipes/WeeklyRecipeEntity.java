@@ -11,6 +11,8 @@ public class WeeklyRecipeEntity {
 
     public int week_number;
 
+    public int year;
+
     public int day_of_week;
 
     public int recipe_id;

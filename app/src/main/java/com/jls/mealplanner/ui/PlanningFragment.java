@@ -1,6 +1,7 @@
 package com.jls.mealplanner.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +22,8 @@ import com.jls.mealplanner.ui.planning.DayAdapter;
 import java.util.Calendar;
 
 public class PlanningFragment extends Fragment {
+
+    private final String TAG = PlanningFragment.class.getSimpleName();
 
     private WeeklyRecipesViewModel weeklyRecipesViewModel;
     private TextView currentWeekText;
@@ -36,12 +38,8 @@ public class PlanningFragment extends Fragment {
         weeklyRecipesViewModel = new ViewModelProvider(requireActivity())
                 .get(WeeklyRecipesViewModel.class);
 
-        weeklyRecipesViewModel.getSelectedWeekNumber().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer weekNumber) {
-                updateWeekText(weekNumber);
-            }
-        });
+        weeklyRecipesViewModel.getSelectedWeekNumber().observe(getViewLifecycleOwner(),
+                                                               this::updateWeekText);
 
         createListOfWeekDays(view);
         addWeekButtonsListeners(view);
@@ -66,15 +64,34 @@ public class PlanningFragment extends Fragment {
 
     private void navigateToPreviousWeek() {
         Integer currentWeek = weeklyRecipesViewModel.getSelectedWeekNumber().getValue();
-        if (currentWeek != null && currentWeek > 1) {
+        Integer currentYear = weeklyRecipesViewModel.getSelectedYear().getValue();
+
+        if (currentWeek == null || currentYear == null) {
+            Log.w(TAG, "Failed to navigate to previous week: current week or year is null");
+            return;
+        }
+        if (currentWeek > 1) {
             weeklyRecipesViewModel.setSelectedWeekNumber(currentWeek - 1);
+        } else {
+            weeklyRecipesViewModel.setSelectedYear(currentYear - 1);
+            weeklyRecipesViewModel.setSelectedWeekNumber(
+                    Calendar.getInstance().getActualMaximum(Calendar.WEEK_OF_YEAR));
         }
     }
 
     private void navigateToNextWeek() {
         Integer currentWeek = weeklyRecipesViewModel.getSelectedWeekNumber().getValue();
-        if (currentWeek != null && currentWeek < Calendar.getInstance().getActualMaximum(Calendar.WEEK_OF_YEAR)) {
+        Integer currentYear = weeklyRecipesViewModel.getSelectedYear().getValue();
+
+        if (currentWeek == null || currentYear == null) {
+            Log.w(TAG, "Failed to navigate to next week: current week or year is null");
+            return;
+        }
+        if (currentWeek < Calendar.getInstance().getActualMaximum(Calendar.WEEK_OF_YEAR)) {
             weeklyRecipesViewModel.setSelectedWeekNumber(currentWeek + 1);
+        } else {
+            weeklyRecipesViewModel.setSelectedYear(currentYear + 1);
+            weeklyRecipesViewModel.setSelectedWeekNumber(1);
         }
     }
 

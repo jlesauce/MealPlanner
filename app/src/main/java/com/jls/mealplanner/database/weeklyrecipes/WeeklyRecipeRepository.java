@@ -23,7 +23,7 @@ public class WeeklyRecipeRepository {
         executorService.execute(() -> weeklyRecipeDao.insert(weeklyRecipe));
     }
 
-    public LiveData<List<WeeklyRecipeEntity>> getRecipesForDay(int weekNumber, int dayOfWeek) {
-        return weeklyRecipeDao.getRecipesForDay(weekNumber, dayOfWeek);
+    public LiveData<List<WeeklyRecipeEntity>> getRecipesForDay(int year, int weekNumber, int dayOfWeek) {
+        return weeklyRecipeDao.getRecipesForDay(year, weekNumber, dayOfWeek);
     }
 }

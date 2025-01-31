@@ -17,11 +17,13 @@ public class WeeklyRecipesViewModel extends AndroidViewModel {
 
     private final WeeklyRecipeRepository repository;
     private final MutableLiveData<Integer> selectedWeekNumber;
+    private final MutableLiveData<Integer> selectedYear;
 
     public WeeklyRecipesViewModel(@NonNull Application application) {
         super(application);
         repository = new WeeklyRecipeRepository();
         selectedWeekNumber = new MutableLiveData<>(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR));
+        selectedYear = new MutableLiveData<>(Calendar.getInstance().get(Calendar.YEAR));
     }
 
     public LiveData<Integer> getSelectedWeekNumber() {
@@ -32,8 +34,16 @@ public class WeeklyRecipesViewModel extends AndroidViewModel {
         selectedWeekNumber.setValue(weekNumber);
     }
 
-    public LiveData<List<WeeklyRecipeEntity>> getRecipeForDay(int weekNumber, int dayOfWeek) {
-        return repository.getRecipesForDay(weekNumber, dayOfWeek);
+    public MutableLiveData<Integer> getSelectedYear() {
+        return selectedYear;
+    }
+
+    public void setSelectedYear(int year) {
+        selectedYear.setValue(year);
+    }
+
+    public LiveData<List<WeeklyRecipeEntity>> getRecipeForDay(int year, int weekNumber, int dayOfWeek) {
+        return repository.getRecipesForDay(year, weekNumber, dayOfWeek);
     }
 
     public void insert(WeeklyRecipeEntity weeklyRecipe) {
