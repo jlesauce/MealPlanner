@@ -1,4 +1,4 @@
-package com.jls.mealplanner.ui;
+package com.jls.mealplanner.ui.recipes;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.databinding.FragmentRecipesBinding;
-import com.jls.mealplanner.ui.recipes.RecipesViewPagerAdapter;
 
 public class RecipesFragment extends Fragment {
 

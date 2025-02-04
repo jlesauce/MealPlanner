@@ -1,4 +1,4 @@
-package com.jls.mealplanner.ui;
+package com.jls.mealplanner.ui.planning;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.databinding.FragmentPlanningBinding;
 import com.jls.mealplanner.model.WeeklyRecipesViewModel;
-import com.jls.mealplanner.ui.planning.DayAdapter;
 
 import java.util.Calendar;
 

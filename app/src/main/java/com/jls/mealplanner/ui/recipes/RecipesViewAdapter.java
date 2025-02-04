@@ -8,27 +8,35 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jls.mealplanner.MainActivity;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
 import com.jls.mealplanner.model.RecipeViewModel;
+import com.jls.mealplanner.ui.OnUserSearchChangeListener;
 
 import java.util.ArrayList;
 
-public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
+public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> implements OnUserSearchChangeListener {
 
     private static final String TAG = RecipesViewAdapter.class.getSimpleName();
 
     private final ArrayList<RecipeEntity> recipes;
+    private final ArrayList<RecipeEntity> visibleRecipes;
     private final RecipeViewModel recipesViewModel;
+    private String userSearchedTextFilter;
 
-    public RecipesViewAdapter(@NonNull Fragment fragment, final RecipeListType listType,
+    public RecipesViewAdapter(FragmentActivity fragmentActivity, Fragment fragment, final RecipeListType listType,
                               RecipeViewModel recipesViewModel) {
+        MainActivity activity = (MainActivity) fragmentActivity;
         this.recipes = new ArrayList<>();
+        this.visibleRecipes = new ArrayList<>();
         this.recipesViewModel = recipesViewModel;
+        this.userSearchedTextFilter = "";
 
         recipesViewModel.getAllRecipes().observe(fragment, allRecipes -> {
             if (allRecipes == null) {
@@ -45,8 +53,11 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
                     recipes.add(recipe);
                 }
             }
-            notifyDataSetChanged();
+
+            updateVisibleIngredientList(userSearchedTextFilter);
         });
+
+        activity.addOnQueryTextChangeCallback(this);
     }
 
     @NonNull
@@ -58,7 +69,7 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, final int position) {
-        RecipeEntity currentRecipe = recipes.get(position);
+        RecipeEntity currentRecipe = visibleRecipes.get(position);
         initRecipeItem(holder, currentRecipe);
 
         holder.itemView.setOnClickListener(v -> {
@@ -69,6 +80,22 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_recipes_to_recipe_details, bundle);
         });
+    }
+
+    @Override
+    public void onUserSearchText(String query) {
+        userSearchedTextFilter = query;
+        updateVisibleIngredientList(query);
+    }
+
+    private void updateVisibleIngredientList(String textFilter) {
+        visibleRecipes.clear();
+        for (RecipeEntity recipe : recipes) {
+            if (recipe.name.toLowerCase().contains(textFilter)) {
+                visibleRecipes.add(recipe);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     private void initRecipeItem(@NonNull RecipeViewHolder holder, final RecipeEntity recipe) {
@@ -88,6 +115,6 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
     @Override
     public int getItemCount() {
-        return recipes == null ? 0 : recipes.size();
+        return visibleRecipes == null ? 0 : visibleRecipes.size();
     }
 }

@@ -28,7 +28,7 @@ public class RecipesTabFragment extends TabFragment {
     protected void onCustomCreateView(RecyclerView recyclerView) {
         RecipeViewModel recipesViewModel = new ViewModelProvider(requireActivity())
                 .get(RecipeViewModel.class);
-        RecipesViewAdapter adapter = new RecipesViewAdapter(this, this.listType, recipesViewModel);
+        RecipesViewAdapter adapter = new RecipesViewAdapter(getActivity(), this, this.listType, recipesViewModel);
         recyclerView.setAdapter(adapter);
     }
 }

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.model.WeeklyRecipesViewModel;
-import com.jls.mealplanner.ui.PlanningFragment;
 
 import java.text.DateFormatSymbols;
 import java.util.Arrays;

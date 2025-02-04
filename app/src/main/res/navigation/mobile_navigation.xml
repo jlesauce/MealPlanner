@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_planning"
-        android:name="com.jls.mealplanner.ui.PlanningFragment"
+        android:name="com.jls.mealplanner.ui.planning.PlanningFragment"
         android:label="@string/planning"
         tools:layout="@layout/fragment_planning" />
 
     <fragment
         android:id="@+id/nav_ingredients"
-        android:name="com.jls.mealplanner.ui.IngredientsFragment"
+        android:name="com.jls.mealplanner.ui.ingredients.IngredientsFragment"
         android:label="@string/ingredients"
         tools:layout="@layout/fragment_ingredients" />
 
     <fragment
         android:id="@+id/nav_recipes"
-        android:name="com.jls.mealplanner.ui.RecipesFragment"
+        android:name="com.jls.mealplanner.ui.recipes.RecipesFragment"
         android:label="@string/recipes"
         tools:layout="@layout/fragment_recipes">
         <action

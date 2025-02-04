@@ -18,7 +18,6 @@ import com.jls.mealplanner.database.recipes.RecipeEntity;
 import com.jls.mealplanner.database.weeklyrecipes.WeeklyRecipeEntity;
 import com.jls.mealplanner.model.RecipeViewModel;
 import com.jls.mealplanner.model.WeeklyRecipesViewModel;
-import com.jls.mealplanner.ui.PlanningFragment;
 import com.jls.mealplanner.ui.recipes.RecipeViewHolder;
 
 import java.util.ArrayList;

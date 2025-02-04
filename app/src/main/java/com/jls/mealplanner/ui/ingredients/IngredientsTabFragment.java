@@ -12,7 +12,6 @@ import com.jls.mealplanner.ui.TabFragment;
 public class IngredientsTabFragment extends TabFragment {
 
     private final IngredientListType listType;
-    private IngredientsViewAdapter adapter;
 
     public IngredientsTabFragment(IngredientListType listType) {
         super(R.layout.tab_ingredients, R.id.ingredientsRecyclerView);
@@ -33,16 +32,8 @@ public class IngredientsTabFragment extends TabFragment {
         IngredientIconsViewModel iconsViewModel = new ViewModelProvider(requireActivity())
                 .get(IngredientIconsViewModel.class);
 
-        adapter = new IngredientsViewAdapter(getActivity(), this, ingredientsViewModel,
-                                             iconsViewModel, this.listType);
+        IngredientsViewAdapter adapter = new IngredientsViewAdapter(getActivity(), this, ingredientsViewModel,
+                                                                    iconsViewModel, this.listType);
         recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (adapter != null) {
-            adapter.onFragmentResume();
-        }
     }
 }

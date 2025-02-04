@@ -95,14 +95,10 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
         initIngredientItem(holder, currentIngredient);
     }
 
-    public void onFragmentResume() {
-        // This method is called when the fragment is resumed.
-    }
-
     @Override
-    public void onUserSearchText(String text) {
-        userSearchedTextFilter = text;
-        updateVisibleIngredientList(text);
+    public void onUserSearchText(String query) {
+        userSearchedTextFilter = query;
+        updateVisibleIngredientList(query);
     }
 
     private void updateVisibleIngredientList(String textFilter) {
