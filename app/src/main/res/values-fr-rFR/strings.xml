@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="application_name">Mes Repas</string>
+    <string name="nav_header_title">Meal Planner</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
     <string name="open">Ouvrir</string>
     <string name="close">Fermer</string>
     <string name="planning">Planning</string>

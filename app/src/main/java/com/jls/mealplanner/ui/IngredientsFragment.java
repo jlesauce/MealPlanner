@@ -5,20 +5,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jls.mealplanner.R;
+import com.jls.mealplanner.databinding.FragmentIngredientsBinding;
 import com.jls.mealplanner.ui.ingredients.IngredientsViewPagerAdapter;
 
 public class IngredientsFragment extends Fragment {
 
+    private FragmentIngredientsBinding binding;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
+        binding = FragmentIngredientsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         String[] tabTitles = new String[]{
                 getResources().getString(R.string.my_ingredients),
@@ -34,5 +39,11 @@ public class IngredientsFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(tabTitles[position])).attach();
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

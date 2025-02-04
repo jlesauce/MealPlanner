@@ -18,4 +18,7 @@ public interface RecipesDao {
 
     @Insert
     void insertRecipe(RecipeEntity recipe);
+
+    @Query("SELECT * FROM recipes WHERE id = :recipeId")
+    RecipeEntity getRecipeById(int recipeId);
 }

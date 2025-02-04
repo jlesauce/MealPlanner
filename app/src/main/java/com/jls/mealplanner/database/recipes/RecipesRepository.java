@@ -31,4 +31,8 @@ public class RecipesRepository {
             recipesDao.updateRecipe(recipe);
         });
     }
+
+    public RecipeEntity getRecipeById(int recipeId) {
+        return recipesDao.getRecipeById(recipeId);
+    }
 }

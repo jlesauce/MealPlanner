@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.jls.mealplanner.ui.PlanningFragment">
 
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/week_navigation_toolbar"
         android:layout_width="match_parent"

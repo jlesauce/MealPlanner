@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
+import com.jls.mealplanner.databinding.FragmentPlanningBinding;
 import com.jls.mealplanner.model.WeeklyRecipesViewModel;
 import com.jls.mealplanner.ui.planning.DayAdapter;
 
@@ -25,6 +26,8 @@ public class PlanningFragment extends Fragment {
 
     private final String TAG = PlanningFragment.class.getSimpleName();
 
+    private FragmentPlanningBinding binding;
+
     private WeeklyRecipesViewModel weeklyRecipesViewModel;
     private TextView currentWeekText;
 
@@ -32,7 +35,9 @@ public class PlanningFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_planning, container, false);
+        binding = FragmentPlanningBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
         currentWeekText = view.findViewById(R.id.current_week_text);
 
         weeklyRecipesViewModel = new ViewModelProvider(requireActivity())
@@ -45,6 +50,12 @@ public class PlanningFragment extends Fragment {
         addWeekButtonsListeners(view);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     private void createListOfWeekDays(View view) {

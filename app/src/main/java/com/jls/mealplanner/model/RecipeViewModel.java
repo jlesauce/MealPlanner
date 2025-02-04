@@ -33,4 +33,8 @@ public class RecipeViewModel extends AndroidViewModel {
     public void insert(RecipeEntity recipe) {
         repository.insert(recipe);
     }
+
+    public RecipeEntity getRecipeById(int recipeId) {
+        return repository.getRecipeById(recipeId);
+    }
 }

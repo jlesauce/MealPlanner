@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,25 +32,20 @@ public class RecipeDetailsFragment extends Fragment {
 
     private final String TAG = RecipeDetailsFragment.class.getSimpleName();
 
-    private final RecipeViewModel recipesViewModel;
-    private final RecipeEntity recipe;
-    private final IngredientsViewModel ingredientsViewModel;
-    private final IngredientIconsViewModel iconsViewModel;
+    private RecipeViewModel recipesViewModel;
+    private RecipeEntity recipe;
 
-    public RecipeDetailsFragment(RecipeViewModel recipesViewModel, IngredientsViewModel ingredientsViewModel,
-                                 IngredientIconsViewModel iconsViewModel, RecipeEntity recipe) {
-        super();
-        Log.d(TAG, "Creating new instance of " + TAG);
-        this.recipesViewModel = recipesViewModel;
-        this.ingredientsViewModel = ingredientsViewModel;
-        this.iconsViewModel = iconsViewModel;
-        this.recipe = recipe;
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        if (getArguments() == null) {
+            throw new IllegalArgumentException("RecipeDetailsFragment requires recipe_id argument");
+        }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        int recipe_id = getArguments().getInt("recipe_id");
+        recipesViewModel = new ViewModelProvider(requireActivity())
+                .get(RecipeViewModel.class);
+        recipe = recipesViewModel.getRecipeById(recipe_id);
+
         View view = inflater.inflate(R.layout.fragment_recipe_details, container, false);
         TextView recipeName = view.findViewById(R.id.recipeName);
         ImageButton favoriteButton = view.findViewById(R.id.favoriteButton);
@@ -101,6 +96,10 @@ public class RecipeDetailsFragment extends Fragment {
 
     private void createIngredientsListRecyclerView(ArrayList<String> ingredients,
                                                    RecyclerView ingredientsRecyclerView) {
+        IngredientsViewModel ingredientsViewModel = new ViewModelProvider(requireActivity())
+                .get(IngredientsViewModel.class);
+        IngredientIconsViewModel iconsViewModel = new ViewModelProvider(requireActivity())
+                .get(IngredientIconsViewModel.class);
         RecipeIngredientsViewAdapter viewAdapter = new RecipeIngredientsViewAdapter(this,
                                                                                     ingredientsViewModel,
                                                                                     iconsViewModel,

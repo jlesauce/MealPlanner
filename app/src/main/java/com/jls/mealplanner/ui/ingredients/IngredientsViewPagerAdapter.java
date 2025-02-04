@@ -19,11 +19,11 @@ public class IngredientsViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new IngredientsTabFragment(IngredientListType.MY_STOCK);
+                return new MyIngredientsFragment();
             case 1:
-                return new IngredientsTabFragment(IngredientListType.ALL_INGREDIENTS);
+                return new AllIngredientsFragment();
             case 2:
-                return new IngredientsTabFragment(IngredientListType.MY_GROCERY_LIST);
+                return new GroceryListFragment();
             default:
                 throw new IllegalStateException("Unexpected value: " + position);
         }

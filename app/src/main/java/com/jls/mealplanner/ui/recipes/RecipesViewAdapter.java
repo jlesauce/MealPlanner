@@ -1,5 +1,6 @@
 package com.jls.mealplanner.ui.recipes;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,12 +8,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
-import com.jls.mealplanner.model.IngredientIconsViewModel;
-import com.jls.mealplanner.model.IngredientsViewModel;
 import com.jls.mealplanner.model.RecipeViewModel;
 
 import java.util.ArrayList;
@@ -21,20 +22,13 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
     private static final String TAG = RecipesViewAdapter.class.getSimpleName();
 
-    private final Fragment topFragment;
     private final ArrayList<RecipeEntity> recipes;
     private final RecipeViewModel recipesViewModel;
-    private final IngredientIconsViewModel iconsViewModel;
-    private final IngredientsViewModel ingredientsViewModel;
 
-    public RecipesViewAdapter(@NonNull Fragment topFragment, @NonNull Fragment fragment, final RecipeListType listType,
-                              RecipeViewModel recipesViewModel, IngredientsViewModel ingredientsViewModel,
-                              IngredientIconsViewModel iconsViewModel) {
-        this.topFragment = topFragment;
+    public RecipesViewAdapter(@NonNull Fragment fragment, final RecipeListType listType,
+                              RecipeViewModel recipesViewModel) {
         this.recipes = new ArrayList<>();
         this.recipesViewModel = recipesViewModel;
-        this.ingredientsViewModel = ingredientsViewModel;
-        this.iconsViewModel = iconsViewModel;
 
         recipesViewModel.getAllRecipes().observe(fragment, allRecipes -> {
             if (allRecipes == null) {
@@ -69,12 +63,11 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
         holder.itemView.setOnClickListener(v -> {
             Log.d(TAG, "Recipe clicked: " + currentRecipe.name);
-            RecipeDetailsFragment fragment = new RecipeDetailsFragment(recipesViewModel, ingredientsViewModel,
-                                                                       iconsViewModel, currentRecipe);
-            topFragment.getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
+            Bundle bundle = new Bundle();
+            bundle.putInt("recipe_id", currentRecipe.id);
+
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_recipes_to_recipe_details, bundle);
         });
     }
 
