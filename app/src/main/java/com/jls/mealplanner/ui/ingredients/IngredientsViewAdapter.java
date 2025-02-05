@@ -7,11 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jls.mealplanner.MainActivity;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
@@ -35,9 +32,9 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
     private final HashMap<String, IngredientIconEntity> icons;
     private String userSearchedTextFilter;
 
-    public IngredientsViewAdapter(FragmentActivity fragmentActivity, Fragment fragment, IngredientsViewModel viewModel,
+    public IngredientsViewAdapter(IngredientsFragment parentFragment, IngredientsTabFragment tabFragment,
+                                  IngredientsViewModel viewModel,
                                   IngredientIconsViewModel iconsViewModel, IngredientListType ingredientListType) {
-        MainActivity activity = (MainActivity) fragmentActivity;
         this.ingredientsViewModel = viewModel;
         this.ingredientsListType = ingredientListType;
         this.ingredients = new ArrayList<>();
@@ -45,7 +42,7 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
         this.icons = new HashMap<>();
         this.userSearchedTextFilter = "";
 
-        this.ingredientsViewModel.getAllIngredients().observe(fragment, allIngredients -> {
+        this.ingredientsViewModel.getAllIngredients().observe(tabFragment, allIngredients -> {
             IngredientListType v = ingredientsListType;
 
             if (allIngredients == null) {
@@ -66,7 +63,7 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
             updateVisibleIngredientList(userSearchedTextFilter);
         });
 
-        iconsViewModel.getAllIngredientIcons().observe(fragment, allIcons -> {
+        iconsViewModel.getAllIngredientIcons().observe(tabFragment, allIcons -> {
             if (allIcons == null) {
                 return;
             }
@@ -79,7 +76,7 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
             notifyItemRangeInserted(0, icons.size());
         });
 
-        activity.addOnQueryTextChangeCallback(this);
+        parentFragment.addOnQueryTextChangeCallback(this);
     }
 
     @NonNull

@@ -1,5 +1,7 @@
 package com.jls.mealplanner.ui.recipes;
 
+import android.util.Log;
+
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +12,7 @@ import com.jls.mealplanner.ui.TabFragment;
 
 public class RecipesTabFragment extends TabFragment {
 
+    private final String TAG = RecipesTabFragment.class.getSimpleName();
     private final RecipeListType listType;
 
     public RecipesTabFragment(RecipeListType listType) {
@@ -26,9 +29,16 @@ public class RecipesTabFragment extends TabFragment {
      * @param recyclerView the RecyclerView of the fragment.
      */
     protected void onCustomCreateView(RecyclerView recyclerView) {
+        Log.i(TAG, "Creating " + TAG);
         RecipeViewModel recipesViewModel = new ViewModelProvider(requireActivity())
                 .get(RecipeViewModel.class);
-        RecipesViewAdapter adapter = new RecipesViewAdapter(getActivity(), this, this.listType, recipesViewModel);
+
+        RecipesFragment parentFragment = (RecipesFragment) getParentFragment();
+        if (parentFragment == null) {
+            throw new IllegalStateException("The parent fragment is null.");
+        }
+
+        RecipesViewAdapter adapter = new RecipesViewAdapter(parentFragment, this, this.listType, recipesViewModel);
         recyclerView.setAdapter(adapter);
     }
 }

@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jls.mealplanner.MainActivity;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
 import com.jls.mealplanner.model.RecipeViewModel;
@@ -30,15 +28,14 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> i
     private final RecipeViewModel recipesViewModel;
     private String userSearchedTextFilter;
 
-    public RecipesViewAdapter(FragmentActivity fragmentActivity, Fragment fragment, final RecipeListType listType,
+    public RecipesViewAdapter(RecipesFragment parentFragment, Fragment tabFragment, final RecipeListType listType,
                               RecipeViewModel recipesViewModel) {
-        MainActivity activity = (MainActivity) fragmentActivity;
         this.recipes = new ArrayList<>();
         this.visibleRecipes = new ArrayList<>();
         this.recipesViewModel = recipesViewModel;
         this.userSearchedTextFilter = "";
 
-        recipesViewModel.getAllRecipes().observe(fragment, allRecipes -> {
+        recipesViewModel.getAllRecipes().observe(tabFragment, allRecipes -> {
             if (allRecipes == null) {
                 return;
             }
@@ -57,7 +54,7 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> i
             updateVisibleIngredientList(userSearchedTextFilter);
         });
 
-        activity.addOnQueryTextChangeCallback(this);
+        parentFragment.addOnQueryTextChangeCallback(this);
     }
 
     @NonNull
