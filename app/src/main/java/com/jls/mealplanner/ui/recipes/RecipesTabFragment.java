@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jls.mealplanner.MealPlannerApplication;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.model.RecipeViewModel;
 import com.jls.mealplanner.ui.TabFragment;
@@ -30,7 +31,8 @@ public class RecipesTabFragment extends TabFragment {
      */
     protected void onCustomCreateView(RecyclerView recyclerView) {
         Log.i(TAG, "Creating " + TAG);
-        RecipeViewModel recipesViewModel = new ViewModelProvider(requireActivity())
+        ViewModelProvider.Factory factory = MealPlannerApplication.viewModelFactory(requireActivity());
+        RecipeViewModel recipesViewModel = new ViewModelProvider(requireActivity(), factory)
                 .get(RecipeViewModel.class);
 
         RecipesFragment parentFragment = (RecipesFragment) getParentFragment();

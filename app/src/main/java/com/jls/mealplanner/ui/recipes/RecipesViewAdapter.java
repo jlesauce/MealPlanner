@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
@@ -18,20 +19,35 @@ import com.jls.mealplanner.model.RecipeViewModel;
 import com.jls.mealplanner.ui.OnUserSearchChangeListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> implements OnUserSearchChangeListener {
+public class RecipesViewAdapter extends ListAdapter<RecipeEntity, RecipeViewHolder>
+        implements OnUserSearchChangeListener {
 
     private static final String TAG = RecipesViewAdapter.class.getSimpleName();
 
+    private static final DiffUtil.ItemCallback<RecipeEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<RecipeEntity>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull RecipeEntity oldItem, @NonNull RecipeEntity newItem) {
+                    return oldItem.id == newItem.id;
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull RecipeEntity oldItem, @NonNull RecipeEntity newItem) {
+                    return oldItem.isInFavorite == newItem.isInFavorite
+                            && oldItem.name.equals(newItem.name);
+                }
+            };
+
     private final ArrayList<RecipeEntity> recipes;
-    private final ArrayList<RecipeEntity> visibleRecipes;
     private final RecipeViewModel recipesViewModel;
     private String userSearchedTextFilter;
 
     public RecipesViewAdapter(RecipesFragment parentFragment, Fragment tabFragment, final RecipeListType listType,
                               RecipeViewModel recipesViewModel) {
+        super(DIFF_CALLBACK);
         this.recipes = new ArrayList<>();
-        this.visibleRecipes = new ArrayList<>();
         this.recipesViewModel = recipesViewModel;
         this.userSearchedTextFilter = "";
 
@@ -50,8 +66,7 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> i
                     recipes.add(recipe);
                 }
             }
-
-            updateVisibleIngredientList(userSearchedTextFilter);
+            submitFilteredList(userSearchedTextFilter);
         });
 
         parentFragment.addOnQueryTextChangeCallback(this);
@@ -66,13 +81,12 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> i
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, final int position) {
-        RecipeEntity currentRecipe = visibleRecipes.get(position);
+        RecipeEntity currentRecipe = getItem(position);
         initRecipeItem(holder, currentRecipe);
 
         holder.itemView.setOnClickListener(v -> {
             Log.d(TAG, "Recipe clicked: " + currentRecipe.name);
-            Bundle bundle = new Bundle();
-            bundle.putInt("recipe_id", currentRecipe.id);
+            Bundle bundle = RecipeDetailsFragment.createArgs(currentRecipe.id);
 
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_recipes_to_recipe_details, bundle);
@@ -82,17 +96,18 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> i
     @Override
     public void onUserSearchText(String query) {
         userSearchedTextFilter = query;
-        updateVisibleIngredientList(query);
+        submitFilteredList(query);
     }
 
-    private void updateVisibleIngredientList(String textFilter) {
-        visibleRecipes.clear();
+    private void submitFilteredList(String textFilter) {
+        String normalizedFilter = textFilter == null ? "" : textFilter.toLowerCase();
+        List<RecipeEntity> filtered = new ArrayList<>();
         for (RecipeEntity recipe : recipes) {
-            if (recipe.name.toLowerCase().contains(textFilter)) {
-                visibleRecipes.add(recipe);
+            if (recipe.name.toLowerCase().contains(normalizedFilter)) {
+                filtered.add(recipe);
             }
         }
-        notifyDataSetChanged();
+        submitList(filtered);
     }
 
     private void initRecipeItem(@NonNull RecipeViewHolder holder, final RecipeEntity recipe) {
@@ -108,10 +123,5 @@ public class RecipesViewAdapter extends RecyclerView.Adapter<RecipeViewHolder> i
         recipe.isInFavorite = !recipe.isInFavorite;
         holder.updateRecipeInFavoritesButton(recipe.isInFavorite);
         this.recipesViewModel.updateRecipe(recipe);
-    }
-
-    @Override
-    public int getItemCount() {
-        return visibleRecipes == null ? 0 : visibleRecipes.size();
     }
 }

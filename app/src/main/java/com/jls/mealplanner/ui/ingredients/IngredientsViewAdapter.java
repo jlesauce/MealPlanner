@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.ingredienticons.IngredientIconEntity;
@@ -19,48 +20,64 @@ import com.jls.mealplanner.utils.AssetUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
-public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewHolder>
+public class IngredientsViewAdapter extends ListAdapter<IngredientEntity, IngredientViewHolder>
         implements OnUserSearchChangeListener {
 
     private final String TAG = IngredientsViewAdapter.class.getSimpleName();
 
+    private static final DiffUtil.ItemCallback<IngredientEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<IngredientEntity>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull IngredientEntity oldItem, @NonNull IngredientEntity newItem) {
+                    return oldItem.id == newItem.id;
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull IngredientEntity oldItem,
+                                                  @NonNull IngredientEntity newItem) {
+                    return oldItem.isPossessed == newItem.isPossessed
+                            && oldItem.isInGroceryList == newItem.isInGroceryList
+                            && Objects.equals(oldItem.name, newItem.name)
+                            && Objects.equals(oldItem.iconId, newItem.iconId);
+                }
+            };
+
     private final IngredientsViewModel ingredientsViewModel;
     private final IngredientListType ingredientsListType;
     private final ArrayList<IngredientEntity> ingredients;
-    private final ArrayList<IngredientEntity> visibleIngredients;
     private final HashMap<String, IngredientIconEntity> icons;
     private String userSearchedTextFilter;
 
     public IngredientsViewAdapter(IngredientsFragment parentFragment, IngredientsTabFragment tabFragment,
                                   IngredientsViewModel viewModel,
                                   IngredientIconsViewModel iconsViewModel, IngredientListType ingredientListType) {
+        super(DIFF_CALLBACK);
         this.ingredientsViewModel = viewModel;
         this.ingredientsListType = ingredientListType;
         this.ingredients = new ArrayList<>();
-        this.visibleIngredients = new ArrayList<>();
         this.icons = new HashMap<>();
         this.userSearchedTextFilter = "";
 
         this.ingredientsViewModel.getAllIngredients().observe(tabFragment, allIngredients -> {
-            IngredientListType v = ingredientsListType;
-
             if (allIngredients == null) {
                 return;
             }
 
             ingredients.clear();
             for (IngredientEntity ingredient : allIngredients) {
-                if (v == IngredientListType.MY_STOCK && ingredient.isPossessed) {
+                if (ingredientsListType == IngredientListType.MY_STOCK && ingredient.isPossessed) {
                     ingredients.add(ingredient);
-                } else if (v == IngredientListType.MY_GROCERY_LIST && ingredient.isInGroceryList) {
+                } else if (ingredientsListType == IngredientListType.MY_GROCERY_LIST && ingredient.isInGroceryList) {
                     ingredients.add(ingredient);
-                } else if (v == IngredientListType.ALL_INGREDIENTS) {
+                } else if (ingredientsListType == IngredientListType.ALL_INGREDIENTS) {
                     ingredients.add(ingredient);
                 }
             }
 
-            updateVisibleIngredientList(userSearchedTextFilter);
+            submitFilteredList(userSearchedTextFilter);
         });
 
         iconsViewModel.getAllIngredientIcons().observe(tabFragment, allIcons -> {
@@ -73,7 +90,8 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
                 icons.put(icon.shortName, icon);
             }
 
-            notifyItemRangeInserted(0, icons.size());
+            // Icons arrived (or changed): rebind the currently displayed rows so they show them.
+            notifyItemRangeChanged(0, getItemCount());
         });
 
         parentFragment.addOnQueryTextChangeCallback(this);
@@ -88,24 +106,25 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, final int position) {
-        IngredientEntity currentIngredient = visibleIngredients.get(position);
+        IngredientEntity currentIngredient = getItem(position);
         initIngredientItem(holder, currentIngredient);
     }
 
     @Override
     public void onUserSearchText(String query) {
         userSearchedTextFilter = query;
-        updateVisibleIngredientList(query);
+        submitFilteredList(query);
     }
 
-    private void updateVisibleIngredientList(String textFilter) {
-        visibleIngredients.clear();
+    private void submitFilteredList(String textFilter) {
+        String normalizedFilter = textFilter == null ? "" : textFilter.toLowerCase();
+        List<IngredientEntity> filtered = new ArrayList<>();
         for (IngredientEntity ingredient : ingredients) {
-            if (ingredient.name.toLowerCase().contains(textFilter)) {
-                visibleIngredients.add(ingredient);
+            if (ingredient.name.toLowerCase().contains(normalizedFilter)) {
+                filtered.add(ingredient);
             }
         }
-        notifyDataSetChanged();
+        submitList(filtered);
     }
 
     private void initIngredientItem(@NonNull IngredientViewHolder holder, final IngredientEntity ingredient) {
@@ -126,27 +145,17 @@ public class IngredientsViewAdapter extends RecyclerView.Adapter<IngredientViewH
         holder.addIngredientToGroceryList.setOnClickListener(
                 v -> ingredientInGroceryListButtonClicked(holder, ingredient));
         holder.addToMyIngredientsCheckBox.setOnClickListener(
-                v -> ingredientInMyIngredientsCheckBoxClicked(holder, ingredient));
+                v -> ingredientInMyIngredientsCheckBoxClicked(ingredient));
     }
 
     private void ingredientInGroceryListButtonClicked(IngredientViewHolder holder, final IngredientEntity ingredient) {
-        int position = holder.getAdapterPosition();
         ingredient.isInGroceryList = !ingredient.isInGroceryList;
         holder.updateIngredientInGroceryListButton(ingredient.isInGroceryList);
         this.ingredientsViewModel.updateIngredient(ingredient);
-        notifyItemChanged(position);
     }
 
-    private void ingredientInMyIngredientsCheckBoxClicked(IngredientViewHolder holder,
-                                                          final IngredientEntity ingredient) {
-        int position = holder.getAdapterPosition();
+    private void ingredientInMyIngredientsCheckBoxClicked(final IngredientEntity ingredient) {
         ingredient.isPossessed = !ingredient.isPossessed;
         this.ingredientsViewModel.updateIngredient(ingredient);
-        notifyItemChanged(position);
-    }
-
-    @Override
-    public int getItemCount() {
-        return visibleIngredients == null ? 0 : visibleIngredients.size();
     }
 }

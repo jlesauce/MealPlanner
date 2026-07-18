@@ -10,10 +10,9 @@ public class IngredientIconRepository {
     private final IngredientIconsDao ingredientIconsDao;
     private final LiveData<List<IngredientIconEntity>> allIngredientIcons;
 
-    public IngredientIconRepository() {
-        ApplicationDatabase db = ApplicationDatabase.getInstance();
-        ingredientIconsDao = db.ingredientsIconDao();
-        allIngredientIcons = ingredientIconsDao.getAllIngredientIcons();
+    public IngredientIconRepository(IngredientIconsDao ingredientIconsDao) {
+        this.ingredientIconsDao = ingredientIconsDao;
+        this.allIngredientIcons = ingredientIconsDao.getAllIngredientIcons();
     }
 
     public LiveData<List<IngredientIconEntity>> getAllIngredientIcons() {

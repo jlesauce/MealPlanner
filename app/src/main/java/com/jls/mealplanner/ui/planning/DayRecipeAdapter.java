@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jls.mealplanner.MealPlannerApplication;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
 import com.jls.mealplanner.database.weeklyrecipes.WeeklyRecipeEntity;
@@ -44,7 +45,8 @@ public class DayRecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         this.allRecipes = new HashMap<>();
         this.weeklyRecipesObservers = new HashMap<>();
 
-        RecipeViewModel recipeViewModel = new ViewModelProvider(fragment.requireActivity())
+        ViewModelProvider.Factory factory = MealPlannerApplication.viewModelFactory(fragment.requireActivity());
+        RecipeViewModel recipeViewModel = new ViewModelProvider(fragment.requireActivity(), factory)
                 .get(RecipeViewModel.class);
         recipeViewModel.getAllRecipes().observe(fragment, recipes -> {
             if (recipes == null) {

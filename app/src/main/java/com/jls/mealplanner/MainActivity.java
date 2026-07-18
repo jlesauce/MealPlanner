@@ -14,11 +14,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.jls.mealplanner.database.ApplicationDatabase;
 import com.jls.mealplanner.databinding.ActivityMainBinding;
 import com.jls.mealplanner.utils.UserPermInteractor;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "Creating " + TAG);
         super.onCreate(savedInstanceState);
 
-        initializeDatabase();
         createUi();
         sendUserTestRequest();
     }
@@ -85,16 +81,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void initializeDatabase() {
-        try {
-            Log.d(TAG, "Initializing database");
-            ApplicationDatabase.initializeInstance(this,
-                                                   getResources().getBoolean(R.bool.force_database_reinstall));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void sendUserTestRequest() {

@@ -11,10 +11,9 @@ public class IngredientRepository {
     private final IngredientsDao ingredientsDao;
     private final LiveData<List<IngredientEntity>> allIngredients;
 
-    public IngredientRepository() {
-        ApplicationDatabase db = ApplicationDatabase.getInstance();
-        ingredientsDao = db.ingredientsDao();
-        allIngredients = ingredientsDao.getAllIngredients();
+    public IngredientRepository(IngredientsDao ingredientsDao) {
+        this.ingredientsDao = ingredientsDao;
+        this.allIngredients = ingredientsDao.getAllIngredients();
     }
 
     public LiveData<List<IngredientEntity>> getAllIngredients() {

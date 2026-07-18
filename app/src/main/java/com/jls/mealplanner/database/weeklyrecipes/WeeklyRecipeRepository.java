@@ -2,8 +2,6 @@ package com.jls.mealplanner.database.weeklyrecipes;
 
 import androidx.lifecycle.LiveData;
 
-import com.jls.mealplanner.database.ApplicationDatabase;
-
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,10 +11,9 @@ public class WeeklyRecipeRepository {
     private final ExecutorService executorService;
     private final WeeklyRecipeDao weeklyRecipeDao;
 
-    public WeeklyRecipeRepository() {
-        ApplicationDatabase db = ApplicationDatabase.getInstance();
-        weeklyRecipeDao = db.weeklyRecipeDao();
-        executorService = Executors.newSingleThreadExecutor();
+    public WeeklyRecipeRepository(WeeklyRecipeDao weeklyRecipeDao) {
+        this.weeklyRecipeDao = weeklyRecipeDao;
+        this.executorService = Executors.newSingleThreadExecutor();
     }
 
     public void insert(WeeklyRecipeEntity weeklyRecipe) {

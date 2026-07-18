@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jls.mealplanner.MealPlannerApplication;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.database.recipes.RecipeEntity;
 import com.jls.mealplanner.model.IngredientIconsViewModel;
@@ -30,39 +31,65 @@ import java.util.List;
 
 public class RecipeDetailsFragment extends Fragment {
 
+    public static final String ARG_RECIPE_ID = "recipe_id";
+
     private final String TAG = RecipeDetailsFragment.class.getSimpleName();
 
     private RecipeViewModel recipesViewModel;
     private RecipeEntity recipe;
+    private boolean staticContentPopulated = false;
 
+    /** Builds the argument bundle expected by this fragment, avoiding a raw magic-string key. */
+    public static Bundle createArgs(int recipeId) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_RECIPE_ID, recipeId);
+        return bundle;
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_recipe_details, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         if (getArguments() == null) {
             throw new IllegalArgumentException("RecipeDetailsFragment requires recipe_id argument");
         }
 
-        int recipe_id = getArguments().getInt("recipe_id");
-        recipesViewModel = new ViewModelProvider(requireActivity())
+        int recipe_id = getArguments().getInt(ARG_RECIPE_ID);
+        ViewModelProvider.Factory factory = MealPlannerApplication.viewModelFactory(requireActivity());
+        recipesViewModel = new ViewModelProvider(requireActivity(), factory)
                 .get(RecipeViewModel.class);
-        recipe = recipesViewModel.getRecipeById(recipe_id);
 
-        View view = inflater.inflate(R.layout.fragment_recipe_details, container, false);
         TextView recipeName = view.findViewById(R.id.recipeName);
         ImageButton favoriteButton = view.findViewById(R.id.favoriteButton);
         TextView recipeDescription = view.findViewById(R.id.recipeDescription);
         LinearLayout stepsContainer = view.findViewById(R.id.stepsContainer);
         RecyclerView ingredientsRecyclerView = view.findViewById(R.id.recipeIngredientsRecyclerView);
-        Pair<List<String>, ArrayList<String>> stepsAndIngredients = extractStepsAndIngredients(recipe);
-
-        recipeName.setText(recipe.name);
-        recipeDescription.setText(recipe.description);
-        updateRecipeInFavoritesButton(favoriteButton, recipe.isInFavorite);
-        updateRecipeStepsContainer(stepsAndIngredients.first, stepsContainer);
-        createIngredientsListRecyclerView(stepsAndIngredients.second, ingredientsRecyclerView);
 
         favoriteButton.setOnClickListener(v -> recipeToFavoritesButtonClicked(favoriteButton));
 
-        return view;
+        recipesViewModel.getRecipeById(recipe_id).observe(getViewLifecycleOwner(), recipeEntity -> {
+            if (recipeEntity == null) {
+                Log.w(TAG, "No recipe found for id=" + recipe_id);
+                return;
+            }
+            recipe = recipeEntity;
+            updateRecipeInFavoritesButton(favoriteButton, recipe.isInFavorite);
+
+            if (!staticContentPopulated) {
+                Pair<List<String>, ArrayList<String>> stepsAndIngredients = extractStepsAndIngredients(recipe);
+                recipeName.setText(recipe.name);
+                recipeDescription.setText(recipe.description);
+                updateRecipeStepsContainer(stepsAndIngredients.first, stepsContainer);
+                createIngredientsListRecyclerView(stepsAndIngredients.second, ingredientsRecyclerView);
+                staticContentPopulated = true;
+            }
+        });
     }
 
     private Pair<List<String>, ArrayList<String>> extractStepsAndIngredients(RecipeEntity recipe) {
@@ -75,6 +102,9 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
     private void recipeToFavoritesButtonClicked(ImageButton favoriteButton) {
+        if (recipe == null) {
+            return;
+        }
         recipe.isInFavorite = !recipe.isInFavorite;
         Log.d(TAG, "Add recipe to favorites button clicked, isInFavorite=" + recipe.isInFavorite);
         updateRecipeInFavoritesButton(favoriteButton, recipe.isInFavorite);
@@ -96,9 +126,10 @@ public class RecipeDetailsFragment extends Fragment {
 
     private void createIngredientsListRecyclerView(ArrayList<String> ingredients,
                                                    RecyclerView ingredientsRecyclerView) {
-        IngredientsViewModel ingredientsViewModel = new ViewModelProvider(requireActivity())
+        ViewModelProvider.Factory factory = MealPlannerApplication.viewModelFactory(requireActivity());
+        IngredientsViewModel ingredientsViewModel = new ViewModelProvider(requireActivity(), factory)
                 .get(IngredientsViewModel.class);
-        IngredientIconsViewModel iconsViewModel = new ViewModelProvider(requireActivity())
+        IngredientIconsViewModel iconsViewModel = new ViewModelProvider(requireActivity(), factory)
                 .get(IngredientIconsViewModel.class);
         RecipeIngredientsViewAdapter viewAdapter = new RecipeIngredientsViewAdapter(this,
                                                                                     ingredientsViewModel,

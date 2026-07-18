@@ -47,7 +47,7 @@ public class RecipeIngredientsViewAdapter extends RecyclerView.Adapter<Ingredien
                 icons.put(icon.shortName, icon);
             }
 
-            notifyItemRangeInserted(0, ingredientNames.size());
+            notifyItemRangeChanged(0, ingredientNames.size());
         });
     }
 

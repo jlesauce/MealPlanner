@@ -1,26 +1,22 @@
 package com.jls.mealplanner.model;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.jls.mealplanner.database.ingredients.IngredientEntity;
 import com.jls.mealplanner.database.ingredients.IngredientRepository;
 
 import java.util.List;
 
-public class IngredientsViewModel extends AndroidViewModel {
+public class IngredientsViewModel extends ViewModel {
 
     private final IngredientRepository repository;
     private final LiveData<List<IngredientEntity>> allIngredients;
 
-    public IngredientsViewModel(@NonNull Application application) {
-        super(application);
-        repository = new IngredientRepository();
-        allIngredients = repository.getAllIngredients();
+    public IngredientsViewModel(IngredientRepository repository) {
+        this.repository = repository;
+        this.allIngredients = repository.getAllIngredients();
     }
 
     public LiveData<List<IngredientEntity>> getAllIngredients() {

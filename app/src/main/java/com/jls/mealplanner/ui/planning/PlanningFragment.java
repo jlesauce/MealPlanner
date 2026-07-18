@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jls.mealplanner.MealPlannerApplication;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.databinding.FragmentPlanningBinding;
 import com.jls.mealplanner.model.WeeklyRecipesViewModel;
@@ -39,7 +40,8 @@ public class PlanningFragment extends Fragment {
 
         currentWeekText = view.findViewById(R.id.current_week_text);
 
-        weeklyRecipesViewModel = new ViewModelProvider(requireActivity())
+        ViewModelProvider.Factory factory = MealPlannerApplication.viewModelFactory(requireActivity());
+        weeklyRecipesViewModel = new ViewModelProvider(requireActivity(), factory)
                 .get(WeeklyRecipesViewModel.class);
 
         weeklyRecipesViewModel.getSelectedWeekNumber().observe(getViewLifecycleOwner(),

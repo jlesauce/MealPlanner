@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jls.mealplanner.MealPlannerApplication;
 import com.jls.mealplanner.R;
 import com.jls.mealplanner.model.IngredientIconsViewModel;
 import com.jls.mealplanner.model.IngredientsViewModel;
@@ -32,9 +33,10 @@ public class IngredientsTabFragment extends TabFragment {
     protected void onCustomCreateView(RecyclerView recyclerView) {
         Log.i(TAG, "Creating " + TAG);
 
-        IngredientsViewModel ingredientsViewModel = new ViewModelProvider(requireActivity())
+        ViewModelProvider.Factory factory = MealPlannerApplication.viewModelFactory(requireActivity());
+        IngredientsViewModel ingredientsViewModel = new ViewModelProvider(requireActivity(), factory)
                 .get(IngredientsViewModel.class);
-        IngredientIconsViewModel iconsViewModel = new ViewModelProvider(requireActivity())
+        IngredientIconsViewModel iconsViewModel = new ViewModelProvider(requireActivity(), factory)
                 .get(IngredientIconsViewModel.class);
 
         IngredientsFragment parentFragment = (IngredientsFragment) getParentFragment();

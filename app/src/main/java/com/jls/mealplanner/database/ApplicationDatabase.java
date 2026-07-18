@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {IngredientEntity.class, IngredientIconEntity.class, RecipeEntity.class, WeeklyRecipeEntity.class},
-        version = 9, exportSchema = false)
+        version = 9, exportSchema = true)
 public abstract class ApplicationDatabase extends RoomDatabase {
 
     private static final String DEFAULT_DB_NAME = "default_database.db";
@@ -40,37 +40,24 @@ public abstract class ApplicationDatabase extends RoomDatabase {
 
     private static final String TAG = ApplicationDatabase.class.getSimpleName();
 
-    private static ApplicationDatabase INSTANCE = null;
-
-
-    public static synchronized void initializeInstance(final Context context,
-                                                       boolean forceDbReinstall) throws IOException {
-        if (ApplicationDatabase.INSTANCE == null) {
-            Log.d(TAG, "Initializing " + ApplicationDatabase.class.getSimpleName());
-            if (forceDbReinstall) {
-                deleteDatabase(context);
-            }
-            if (!databaseExists(context)) {
-                copyDefaultDatabaseToApplicationStorage(context);
-            }
-
-            ApplicationDatabase.INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                                                ApplicationDatabase.class, DATABASE_NAME)
-                    .allowMainThreadQueries()
-                    .fallbackToDestructiveMigration() // FIXME Remove this line when app deployed
-                    .build();
-        } else {
-            throw new RuntimeException(ApplicationDatabase.class.getSimpleName() +
-                                               " is already initialized, call getInstance() method instead.");
+    /**
+     * Builds a new {@link ApplicationDatabase} instance, copying the bundled default database into
+     * application storage on first use. The returned instance is expected to be held for the whole
+     * application lifetime (see {@code AppContainer}).
+     */
+    public static ApplicationDatabase create(final Context context, boolean forceDbReinstall) throws IOException {
+        Log.d(TAG, "Creating " + ApplicationDatabase.class.getSimpleName());
+        if (forceDbReinstall) {
+            deleteDatabase(context);
         }
-    }
-
-    public static ApplicationDatabase getInstance() {
-        if (ApplicationDatabase.INSTANCE == null) {
-            throw new IllegalStateException(ApplicationDatabase.class.getSimpleName() +
-                                                    " is not initialized, call initializeInstance(..) method first.");
+        if (!databaseExists(context)) {
+            copyDefaultDatabaseToApplicationStorage(context);
         }
-        return ApplicationDatabase.INSTANCE;
+
+        return Room.databaseBuilder(context.getApplicationContext(),
+                                    ApplicationDatabase.class, DATABASE_NAME)
+                .fallbackToDestructiveMigration() // FIXME Replace with real migrations before release
+                .build();
     }
 
     public abstract IngredientsDao ingredientsDao();

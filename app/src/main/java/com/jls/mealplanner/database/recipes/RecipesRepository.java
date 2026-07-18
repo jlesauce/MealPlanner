@@ -10,10 +10,9 @@ public class RecipesRepository {
     private final RecipesDao recipesDao;
     private final LiveData<List<RecipeEntity>> allRecipes;
 
-    public RecipesRepository() {
-        ApplicationDatabase db = ApplicationDatabase.getInstance();
-        recipesDao = db.recipesDao();
-        allRecipes = recipesDao.getAllRecipes();
+    public RecipesRepository(RecipesDao recipesDao) {
+        this.recipesDao = recipesDao;
+        this.allRecipes = recipesDao.getAllRecipes();
     }
 
     public LiveData<List<RecipeEntity>> getAllRecipes() {
@@ -32,7 +31,7 @@ public class RecipesRepository {
         });
     }
 
-    public RecipeEntity getRecipeById(int recipeId) {
+    public LiveData<RecipeEntity> getRecipeById(int recipeId) {
         return recipesDao.getRecipeById(recipeId);
     }
 }
