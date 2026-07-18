@@ -16,3 +16,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# User-specific / transient IDE state
+/.idea/deploymentTargetSelector.xml
+/.idea/deploymentTargetDropDown.xml
+/.idea/deviceManager.xml
+/.idea/markdown.xml
